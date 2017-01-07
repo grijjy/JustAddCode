@@ -1,0 +1,109 @@
+object FormMain: TFormMain
+  Left = 0
+  Top = 0
+  BorderIcons = [biSystemMenu, biMinimize]
+  BorderStyle = Single
+  Caption = 'Text-to-Speech'
+  ClientHeight = 480
+  ClientWidth = 320
+  Padding.Left = 8.000000000000000000
+  Padding.Top = 8.000000000000000000
+  Padding.Right = 8.000000000000000000
+  Padding.Bottom = 8.000000000000000000
+  Position = ScreenCenter
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnCreate = FormCreate
+  DesignerMasterStyle = 2
+  object Memo: TMemo
+    Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+    DataDetectorTypes = []
+    Lines.Strings = (
+      'The Quick Brown Fox Jumps Over The Lazy Dog')
+    Align = Top
+    Position.X = 8.000000000000000000
+    Position.Y = 8.000000000000000000
+    Size.Width = 304.000000000000000000
+    Size.Height = 56.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    Viewport.Width = 296.000000000000000000
+    Viewport.Height = 48.000000000000000000
+  end
+  object MemoLog: TMemo
+    Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+    DataDetectorTypes = []
+    ReadOnly = True
+    Align = Client
+    Margins.Top = 8.000000000000000000
+    Size.Width = 304.000000000000000000
+    Size.Height = 348.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 1
+    Viewport.Width = 296.000000000000000000
+    Viewport.Height = 340.000000000000000000
+  end
+  object GridPanelLayout2: TGridPanelLayout
+    Align = Top
+    Margins.Top = 8.000000000000000000
+    Position.X = 8.000000000000000000
+    Position.Y = 72.000000000000000000
+    Size.Width = 304.000000000000000000
+    Size.Height = 44.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 2
+    ColumnCollection = <
+      item
+        Value = 50.000000000000010000
+      end
+      item
+        Value = 49.999999999999990000
+      end>
+    ControlCollection = <
+      item
+        Column = 0
+        Control = ButtonSpeak
+        Row = 0
+      end
+      item
+        Column = 1
+        Control = ButtonStop
+        Row = 0
+      end>
+    RowCollection = <
+      item
+        Value = 100.000000000000000000
+      end
+      item
+        SizeStyle = Auto
+      end>
+    object ButtonSpeak: TButton
+      Align = Top
+      Enabled = False
+      Margins.Top = 8.000000000000000000
+      Position.Y = 8.000000000000000000
+      Size.Width = 152.000000000000000000
+      Size.Height = 29.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = 'toolbuttonleft'
+      TabOrder = 2
+      Text = 'Speak'
+      OnClick = ButtonSpeakClick
+    end
+    object ButtonStop: TButton
+      Align = Top
+      Enabled = False
+      Margins.Top = 8.000000000000000000
+      Position.X = 152.000000000000000000
+      Position.Y = 8.000000000000000000
+      Size.Width = 152.000000000000000000
+      Size.Height = 29.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = 'toolbuttonright'
+      TabOrder = 1
+      Text = 'Stop'
+      OnClick = ButtonStopClick
+    end
+  end
+end
