@@ -1,8 +1,6 @@
 unit Grijjy.TextToSpeech.Windows;
 {< Text To Speech engine implementation for Windows }
 
-{$INCLUDE 'Grijjy.inc'}
-
 interface
 
 uses

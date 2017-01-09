@@ -1,8 +1,6 @@
 unit Grijjy.TextToSpeech.macOS;
 {< Text To Speech engine implementation for macOS }
 
-{$INCLUDE 'Grijjy.inc'}
-
 interface
 
 uses

@@ -1,8 +1,6 @@
 unit Grijjy.TextToSpeech;
 {< Universal Text To Speech for iOS, Android, Windows and macOS }
 
-{$INCLUDE 'Grijjy.inc'}
-
 interface
 
 uses

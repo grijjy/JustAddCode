@@ -1,8 +1,6 @@
 unit Grijjy.TextToSpeech.Base;
 {< Base class for text-to-speech implementations }
 
-{$INCLUDE 'Grijjy.inc'}
-
 interface
 
 uses

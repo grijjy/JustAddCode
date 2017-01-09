@@ -72,7 +72,6 @@ end;
 procedure TFormMain.Log(const AMsg: String);
 begin
   MemoLog.Lines.Add(AMsg);
-  UpdateControls;
 end;
 
 procedure TFormMain.TextToSpeechAvailable(Sender: TObject);

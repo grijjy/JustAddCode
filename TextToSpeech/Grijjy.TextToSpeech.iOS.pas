@@ -1,8 +1,6 @@
 unit Grijjy.TextToSpeech.iOS;
 {< Text To Speech engine implementation for iOS }
 
-{$INCLUDE 'Grijjy.inc'}
-
 interface
 
 uses
