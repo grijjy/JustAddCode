@@ -727,14 +727,14 @@ begin
 
       Also, the LR value contains the address of the next instruction after the
       call instruction. Delphi usually uses the BL or BLX instruction to call
-      another routine. These instruction takes 4 bytes, so LR will be set to 4
+      another routine. These instructions takes 4 bytes, so LR will be set to 4
       bytes after the BL(X) instruction (the return address). However, we want
       to know at what address the call was made, so we need to subtract 4
       bytes.
 
-      There is one final complication here: the lowest bit of the LR indicates
-      the mode the CPU operates in (ARM or Thumb). We need to clear this bit to
-      get to the actual address, by AND'ing it with "not 1". }
+      There is one final complication here: the lowest bit of the LR register
+      indicates the mode the CPU operates in (ARM or Thumb). We need to clear
+      this bit to get to the actual address, by AND'ing it with "not 1". }
     FoundLR := False;
     for J := 0 to Length(CallStack.Stack[I]) - 1 do
     begin
