@@ -1,0 +1,60 @@
+inherited FrameManagedTypes: TFrameManagedTypes
+  inherited Memo: TMemo
+    Size.Height = 306.000000000000000000
+    Viewport.Width = 300.000000000000000000
+    Viewport.Height = 302.000000000000000000
+  end
+  inherited ToolBar: TToolBar
+    inherited LabelCaption: TLabel
+      TextSettings.Font.StyleExt = {00070000000000000004000000}
+      Text = 'Managed Types'
+    end
+  end
+  object ButtonCreateObjects: TButton
+    Align = Top
+    Margins.Left = 8.000000000000000000
+    Margins.Top = 8.000000000000000000
+    Margins.Right = 8.000000000000000000
+    Position.X = 8.000000000000000000
+    Position.Y = 52.000000000000000000
+    Size.Width = 304.000000000000000000
+    Size.Height = 30.000000000000000000
+    Size.PlatformDefault = False
+    StyleLookup = 'listitembutton'
+    TabOrder = 4
+    Text = 'Create two objects with reference cycle'
+    OnClick = ButtonCreateObjectsClick
+  end
+  object ButtonReleaseFirst: TButton
+    Align = Top
+    Enabled = False
+    Margins.Left = 8.000000000000000000
+    Margins.Top = 8.000000000000000000
+    Margins.Right = 8.000000000000000000
+    Position.X = 8.000000000000000000
+    Position.Y = 90.000000000000000000
+    Size.Width = 304.000000000000000000
+    Size.Height = 30.000000000000000000
+    Size.PlatformDefault = False
+    StyleLookup = 'listitembutton'
+    TabOrder = 1
+    Text = 'Release first object'
+    OnClick = ButtonReleaseFirstClick
+  end
+  object ButtonReleaseSecond: TButton
+    Align = Top
+    Enabled = False
+    Margins.Left = 8.000000000000000000
+    Margins.Top = 8.000000000000000000
+    Margins.Right = 8.000000000000000000
+    Position.X = 8.000000000000000000
+    Position.Y = 128.000000000000000000
+    Size.Width = 304.000000000000000000
+    Size.Height = 30.000000000000000000
+    Size.PlatformDefault = False
+    StyleLookup = 'listitembutton'
+    TabOrder = 2
+    Text = 'Release second object'
+    OnClick = ButtonReleaseSecondClick
+  end
+end

@@ -1,0 +1,59 @@
+inherited FrameOwnership: TFrameOwnership
+  inherited Memo: TMemo
+    Size.Height = 306.000000000000000000
+    Viewport.Width = 304.000000000000000000
+    Viewport.Height = 306.000000000000000000
+  end
+  inherited ToolBar: TToolBar
+    inherited LabelCaption: TLabel
+      Text = 'Object Ownership'
+    end
+  end
+  object ButtonCreateObjectTree: TButton
+    Align = Top
+    Margins.Left = 8.000000000000000000
+    Margins.Top = 8.000000000000000000
+    Margins.Right = 8.000000000000000000
+    Position.X = 8.000000000000000000
+    Position.Y = 52.000000000000000000
+    Size.Width = 304.000000000000000000
+    Size.Height = 30.000000000000000000
+    Size.PlatformDefault = False
+    StyleLookup = 'listitembutton'
+    TabOrder = 4
+    Text = 'Create Object Tree'
+    OnClick = ButtonCreateObjectTreeClick
+  end
+  object ButtonDeleteFirstBranch: TButton
+    Align = Top
+    Enabled = False
+    Margins.Left = 8.000000000000000000
+    Margins.Top = 8.000000000000000000
+    Margins.Right = 8.000000000000000000
+    Position.X = 8.000000000000000000
+    Position.Y = 90.000000000000000000
+    Size.Width = 304.000000000000000000
+    Size.Height = 30.000000000000000000
+    Size.PlatformDefault = False
+    StyleLookup = 'listitembutton'
+    TabOrder = 1
+    Text = 'Delete first branch of Object Tree'
+    OnClick = ButtonDeleteFirstBranchClick
+  end
+  object ButtonFreeObjectTree: TButton
+    Align = Top
+    Enabled = False
+    Margins.Left = 8.000000000000000000
+    Margins.Top = 8.000000000000000000
+    Margins.Right = 8.000000000000000000
+    Position.X = 8.000000000000000000
+    Position.Y = 128.000000000000000000
+    Size.Width = 304.000000000000000000
+    Size.Height = 30.000000000000000000
+    Size.PlatformDefault = False
+    StyleLookup = 'listitembutton'
+    TabOrder = 2
+    Text = 'Free entire Object Tree'
+    OnClick = ButtonFreeObjectTreeClick
+  end
+end
