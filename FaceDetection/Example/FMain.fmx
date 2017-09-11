@@ -1,0 +1,58 @@
+object FormMain: TFormMain
+  Left = 0
+  Top = 0
+  Caption = 'Face Detection'
+  ClientHeight = 480
+  ClientWidth = 320
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  DesignerMasterStyle = 2
+  object ToolBar: TToolBar
+    Size.Width = 320.000000000000000000
+    Size.Height = 44.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    object LabelImage: TLabel
+      Align = Left
+      AutoSize = True
+      Margins.Left = 4.000000000000000000
+      Position.X = 4.000000000000000000
+      Size.Width = 50.000000000000000000
+      Size.Height = 44.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = 'toollabel'
+      TextSettings.WordWrap = False
+      Text = 'Image'
+    end
+    object PopupBoxImage: TPopupBox
+      Align = Client
+      Items.Strings = (
+        'Test01'
+        'Test02'
+        'Test03'
+        'Test04'
+        'Test05'
+        'Test06'
+        'Test07'
+        'Test08')
+      ItemIndex = 0
+      Margins.Left = 4.000000000000000000
+      Margins.Top = 7.000000000000000000
+      Margins.Right = 4.000000000000000000
+      Margins.Bottom = 7.000000000000000000
+      Size.Width = 258.000000000000000000
+      Size.Height = 30.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      OnChange = PopupBoxImageChange
+    end
+  end
+  object PaintBox: TPaintBox
+    Align = Client
+    Size.Width = 320.000000000000000000
+    Size.Height = 436.000000000000000000
+    Size.PlatformDefault = False
+    OnPaint = PaintBoxPaint
+  end
+end
