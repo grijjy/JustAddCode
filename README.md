@@ -9,3 +9,4 @@ Here you will find sample code and other tidbits from Grijjy's [Just Add Code](h
 * [SIMD Assembly Optimization](SIMDDemo), as discussed in this [blog post](https://blog.grijjy.com/2017/07/10/simd-assembly-optimization/).
 * [Cross-Platform Code Hooking](CrossPlatformHooking), as discussed in this [blog post](https://blog.grijjy.com/2017/07/26/cross-platform-code-hooking/).
 * [Experiments in Uniform Memory Management](UniformMemoryManagement), as discussed in this [blog post](https://blog.grijjy.com/2017/08/09/experiments-in-uniform-memory-management/).
+* [Face Detection on Android and iOS](FaceDetection), as discussed in this [blog post](https://blog.grijjy.com/2017/09/11/face-detection-on-android-and-ios/).
