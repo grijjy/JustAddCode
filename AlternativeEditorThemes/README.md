@@ -1,0 +1,1 @@
+# Alternative Dark Editor Themes for Delphi 10.2.2

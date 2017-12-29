@@ -1,0 +1,374 @@
+<?xml version="1.0"?>
+<AppSettings version="25.0">
+	<SettingGroup Name="Editor\Highlight" Selected="true"/>
+	<SettingGroup Name="Editor\Highlight\Additional search match highlight" Selected="true">
+		<Setting Name="Bold" DataType="1" Value="False"/>
+		<Setting Name="Italic" DataType="1" Value="False"/>
+		<Setting Name="Underline" DataType="1" Value="False"/>
+		<Setting Name="Default Foreground" DataType="1" Value="False"/>
+		<Setting Name="Default Background" DataType="1" Value="False"/>
+		<Setting Name="Foreground Color New" DataType="1" Value="$00AAAAAA"/>
+		<Setting Name="Background Color New" DataType="1" Value="$003C3C3C"/>
+	</SettingGroup>
+	<SettingGroup Name="Editor\Highlight\Assembler" Selected="true">
+		<Setting Name="Bold" DataType="1" Value="False"/>
+		<Setting Name="Italic" DataType="1" Value="False"/>
+		<Setting Name="Underline" DataType="1" Value="False"/>
+		<Setting Name="Default Foreground" DataType="1" Value="False"/>
+		<Setting Name="Default Background" DataType="1" Value="False"/>
+		<Setting Name="Foreground Color New" DataType="1" Value="$009F528A"/>
+		<Setting Name="Background Color New" DataType="1" Value="$001E1E1E"/>
+	</SettingGroup>
+	<SettingGroup Name="Editor\Highlight\Attribute Names" Selected="true">
+		<Setting Name="Bold" DataType="1" Value="False"/>
+		<Setting Name="Italic" DataType="1" Value="False"/>
+		<Setting Name="Underline" DataType="1" Value="False"/>
+		<Setting Name="Default Foreground" DataType="1" Value="False"/>
+		<Setting Name="Default Background" DataType="1" Value="False"/>
+		<Setting Name="Foreground Color New" DataType="1" Value="clWhite"/>
+		<Setting Name="Background Color New" DataType="1" Value="$00323232"/>
+	</SettingGroup>
+	<SettingGroup Name="Editor\Highlight\Attribute Values" Selected="true">
+		<Setting Name="Bold" DataType="1" Value="False"/>
+		<Setting Name="Italic" DataType="1" Value="False"/>
+		<Setting Name="Underline" DataType="1" Value="False"/>
+		<Setting Name="Default Foreground" DataType="1" Value="False"/>
+		<Setting Name="Default Background" DataType="1" Value="False"/>
+		<Setting Name="Foreground Color New" DataType="1" Value="clWhite"/>
+		<Setting Name="Background Color New" DataType="1" Value="$00323232"/>
+	</SettingGroup>
+	<SettingGroup Name="Editor\Highlight\Brace Highlight" Selected="true">
+		<Setting Name="Bold" DataType="1" Value="False"/>
+		<Setting Name="Italic" DataType="1" Value="False"/>
+		<Setting Name="Underline" DataType="1" Value="False"/>
+		<Setting Name="Default Foreground" DataType="1" Value="False"/>
+		<Setting Name="Default Background" DataType="1" Value="False"/>
+		<Setting Name="Foreground Color New" DataType="1" Value="$009F528A"/>
+		<Setting Name="Background Color New" DataType="1" Value="$00323232"/>
+	</SettingGroup>
+	<SettingGroup Name="Editor\Highlight\Character" Selected="true">
+		<Setting Name="Bold" DataType="1" Value="False"/>
+		<Setting Name="Italic" DataType="1" Value="False"/>
+		<Setting Name="Underline" DataType="1" Value="False"/>
+		<Setting Name="Default Foreground" DataType="1" Value="False"/>
+		<Setting Name="Default Background" DataType="1" Value="False"/>
+		<Setting Name="Foreground Color New" DataType="1" Value="$00324CCB"/>
+		<Setting Name="Background Color New" DataType="1" Value="$001E1E1E"/>
+	</SettingGroup>
+	<SettingGroup Name="Editor\Highlight\Code folding tree" Selected="true">
+		<Setting Name="Bold" DataType="1" Value="False"/>
+		<Setting Name="Italic" DataType="1" Value="False"/>
+		<Setting Name="Underline" DataType="1" Value="False"/>
+		<Setting Name="Default Foreground" DataType="1" Value="False"/>
+		<Setting Name="Default Background" DataType="1" Value="False"/>
+		<Setting Name="Foreground Color New" DataType="1" Value="$005A5A5A"/>
+		<Setting Name="Background Color New" DataType="1" Value="$001E1E1E"/>
+	</SettingGroup>
+	<SettingGroup Name="Editor\Highlight\Comment" Selected="true">
+		<Setting Name="Bold" DataType="1" Value="False"/>
+		<Setting Name="Italic" DataType="1" Value="False"/>
+		<Setting Name="Underline" DataType="1" Value="False"/>
+		<Setting Name="Default Foreground" DataType="1" Value="False"/>
+		<Setting Name="Default Background" DataType="1" Value="False"/>
+		<Setting Name="Foreground Color New" DataType="1" Value="$007D9F4D"/>
+		<Setting Name="Background Color New" DataType="1" Value="$001E1E1E"/>
+	</SettingGroup>
+	<SettingGroup Name="Editor\Highlight\Diff addition" Selected="true">
+		<Setting Name="Bold" DataType="1" Value="False"/>
+		<Setting Name="Italic" DataType="1" Value="False"/>
+		<Setting Name="Underline" DataType="1" Value="False"/>
+		<Setting Name="Default Foreground" DataType="1" Value="False"/>
+		<Setting Name="Default Background" DataType="1" Value="False"/>
+		<Setting Name="Foreground Color New" DataType="1" Value="clNavy"/>
+		<Setting Name="Background Color New" DataType="1" Value="clYellow"/>
+	</SettingGroup>
+	<SettingGroup Name="Editor\Highlight\Diff deletion" Selected="true">
+		<Setting Name="Bold" DataType="1" Value="False"/>
+		<Setting Name="Italic" DataType="1" Value="False"/>
+		<Setting Name="Underline" DataType="1" Value="False"/>
+		<Setting Name="Default Foreground" DataType="1" Value="False"/>
+		<Setting Name="Default Background" DataType="1" Value="False"/>
+		<Setting Name="Foreground Color New" DataType="1" Value="clNavy"/>
+		<Setting Name="Background Color New" DataType="1" Value="clRed"/>
+	</SettingGroup>
+	<SettingGroup Name="Editor\Highlight\Diff move" Selected="true">
+		<Setting Name="Bold" DataType="1" Value="False"/>
+		<Setting Name="Italic" DataType="1" Value="False"/>
+		<Setting Name="Underline" DataType="1" Value="False"/>
+		<Setting Name="Default Foreground" DataType="1" Value="False"/>
+		<Setting Name="Default Background" DataType="1" Value="False"/>
+		<Setting Name="Foreground Color New" DataType="1" Value="clNavy"/>
+		<Setting Name="Background Color New" DataType="1" Value="clBlue"/>
+	</SettingGroup>
+	<SettingGroup Name="Editor\Highlight\Disabled break" Selected="true">
+		<Setting Name="Bold" DataType="1" Value="False"/>
+		<Setting Name="Italic" DataType="1" Value="False"/>
+		<Setting Name="Underline" DataType="1" Value="False"/>
+		<Setting Name="Default Foreground" DataType="1" Value="False"/>
+		<Setting Name="Default Background" DataType="1" Value="False"/>
+		<Setting Name="Foreground Color New" DataType="1" Value="$00CCE2EE"/>
+		<Setting Name="Background Color New" DataType="1" Value="$005A5A5A"/>
+	</SettingGroup>
+	<SettingGroup Name="Editor\Highlight\Enabled break" Selected="true">
+		<Setting Name="Bold" DataType="1" Value="False"/>
+		<Setting Name="Italic" DataType="1" Value="False"/>
+		<Setting Name="Underline" DataType="1" Value="False"/>
+		<Setting Name="Default Foreground" DataType="1" Value="False"/>
+		<Setting Name="Default Background" DataType="1" Value="False"/>
+		<Setting Name="Foreground Color New" DataType="1" Value="clBlack"/>
+		<Setting Name="Background Color New" DataType="1" Value="$007D9F4D"/>
+	</SettingGroup>
+	<SettingGroup Name="Editor\Highlight\Error line" Selected="true">
+		<Setting Name="Bold" DataType="1" Value="False"/>
+		<Setting Name="Italic" DataType="1" Value="False"/>
+		<Setting Name="Underline" DataType="1" Value="False"/>
+		<Setting Name="Default Foreground" DataType="1" Value="False"/>
+		<Setting Name="Default Background" DataType="1" Value="False"/>
+		<Setting Name="Foreground Color New" DataType="1" Value="$00D4D4D4"/>
+		<Setting Name="Background Color New" DataType="1" Value="$00324CCB"/>
+	</SettingGroup>
+	<SettingGroup Name="Editor\Highlight\Execution point" Selected="true">
+		<Setting Name="Bold" DataType="1" Value="False"/>
+		<Setting Name="Italic" DataType="1" Value="False"/>
+		<Setting Name="Underline" DataType="1" Value="False"/>
+		<Setting Name="Default Foreground" DataType="1" Value="False"/>
+		<Setting Name="Default Background" DataType="1" Value="False"/>
+		<Setting Name="Foreground Color New" DataType="1" Value="clBlack"/>
+		<Setting Name="Background Color New" DataType="1" Value="$0064B5E8"/>
+	</SettingGroup>
+	<SettingGroup Name="Editor\Highlight\Float" Selected="true">
+		<Setting Name="Bold" DataType="1" Value="False"/>
+		<Setting Name="Italic" DataType="1" Value="False"/>
+		<Setting Name="Underline" DataType="1" Value="False"/>
+		<Setting Name="Default Foreground" DataType="1" Value="False"/>
+		<Setting Name="Default Background" DataType="1" Value="False"/>
+		<Setting Name="Foreground Color New" DataType="1" Value="$0064B5E8"/>
+		<Setting Name="Background Color New" DataType="1" Value="$001E1E1E"/>
+	</SettingGroup>
+	<SettingGroup Name="Editor\Highlight\Folded code" Selected="true">
+		<Setting Name="Bold" DataType="1" Value="False"/>
+		<Setting Name="Italic" DataType="1" Value="False"/>
+		<Setting Name="Underline" DataType="1" Value="False"/>
+		<Setting Name="Default Foreground" DataType="1" Value="False"/>
+		<Setting Name="Default Background" DataType="1" Value="False"/>
+		<Setting Name="Foreground Color New" DataType="1" Value="$005A5A5A"/>
+		<Setting Name="Background Color New" DataType="1" Value="$001E1E1E"/>
+	</SettingGroup>
+	<SettingGroup Name="Editor\Highlight\Hex" Selected="true">
+		<Setting Name="Bold" DataType="1" Value="False"/>
+		<Setting Name="Italic" DataType="1" Value="False"/>
+		<Setting Name="Underline" DataType="1" Value="False"/>
+		<Setting Name="Default Foreground" DataType="1" Value="False"/>
+		<Setting Name="Default Background" DataType="1" Value="False"/>
+		<Setting Name="Foreground Color New" DataType="1" Value="$0064B5E8"/>
+		<Setting Name="Background Color New" DataType="1" Value="$001E1E1E"/>
+	</SettingGroup>
+	<SettingGroup Name="Editor\Highlight\Hot Link" Selected="true">
+		<Setting Name="Bold" DataType="1" Value="False"/>
+		<Setting Name="Italic" DataType="1" Value="False"/>
+		<Setting Name="Underline" DataType="1" Value="True"/>
+		<Setting Name="Default Foreground" DataType="1" Value="False"/>
+		<Setting Name="Default Background" DataType="1" Value="False"/>
+		<Setting Name="Foreground Color New" DataType="1" Value="$009F528A"/>
+		<Setting Name="Background Color New" DataType="1" Value="$001E1E1E"/>
+	</SettingGroup>
+	<SettingGroup Name="Editor\Highlight\Identifier" Selected="true">
+		<Setting Name="Bold" DataType="1" Value="False"/>
+		<Setting Name="Italic" DataType="1" Value="False"/>
+		<Setting Name="Underline" DataType="1" Value="False"/>
+		<Setting Name="Default Foreground" DataType="1" Value="False"/>
+		<Setting Name="Default Background" DataType="1" Value="False"/>
+		<Setting Name="Foreground Color New" DataType="1" Value="$00D4D4D4"/>
+		<Setting Name="Background Color New" DataType="1" Value="$001E1E1E"/>
+	</SettingGroup>
+	<SettingGroup Name="Editor\Highlight\Illegal Char" Selected="true">
+		<Setting Name="Bold" DataType="1" Value="False"/>
+		<Setting Name="Italic" DataType="1" Value="False"/>
+		<Setting Name="Underline" DataType="1" Value="False"/>
+		<Setting Name="Default Foreground" DataType="1" Value="False"/>
+		<Setting Name="Default Background" DataType="1" Value="False"/>
+		<Setting Name="Foreground Color New" DataType="1" Value="clRed"/>
+		<Setting Name="Background Color New" DataType="1" Value="$001E1E1E"/>
+	</SettingGroup>
+	<SettingGroup Name="Editor\Highlight\Invalid break" Selected="true">
+		<Setting Name="Bold" DataType="1" Value="False"/>
+		<Setting Name="Italic" DataType="1" Value="False"/>
+		<Setting Name="Underline" DataType="1" Value="False"/>
+		<Setting Name="Default Foreground" DataType="1" Value="False"/>
+		<Setting Name="Default Background" DataType="1" Value="False"/>
+		<Setting Name="Foreground Color New" DataType="1" Value="$00CCE2EE"/>
+		<Setting Name="Background Color New" DataType="1" Value="$005A5A5A"/>
+	</SettingGroup>
+	<SettingGroup Name="Editor\Highlight\Line Highlight" Selected="true">
+		<Setting Name="Bold" DataType="1" Value="False"/>
+		<Setting Name="Italic" DataType="1" Value="False"/>
+		<Setting Name="Underline" DataType="1" Value="False"/>
+		<Setting Name="Default Foreground" DataType="1" Value="False"/>
+		<Setting Name="Default Background" DataType="1" Value="False"/>
+		<Setting Name="Foreground Color New" DataType="1" Value="clWhite"/>
+		<Setting Name="Background Color New" DataType="1" Value="$00282828"/>
+	</SettingGroup>
+	<SettingGroup Name="Editor\Highlight\Line Number" Selected="true">
+		<Setting Name="Bold" DataType="1" Value="False"/>
+		<Setting Name="Italic" DataType="1" Value="False"/>
+		<Setting Name="Underline" DataType="1" Value="False"/>
+		<Setting Name="Default Foreground" DataType="1" Value="False"/>
+		<Setting Name="Default Background" DataType="1" Value="False"/>
+		<Setting Name="Foreground Color New" DataType="1" Value="$005A5A5A"/>
+		<Setting Name="Background Color New" DataType="1" Value="$001E1E1E"/>
+	</SettingGroup>
+	<SettingGroup Name="Editor\Highlight\Marked block" Selected="true">
+		<Setting Name="Bold" DataType="1" Value="False"/>
+		<Setting Name="Italic" DataType="1" Value="False"/>
+		<Setting Name="Underline" DataType="1" Value="False"/>
+		<Setting Name="Default Foreground" DataType="1" Value="False"/>
+		<Setting Name="Default Background" DataType="1" Value="False"/>
+		<Setting Name="Foreground Color New" DataType="1" Value="$00D4D4D4"/>
+		<Setting Name="Background Color New" DataType="1" Value="$00B2783D"/>
+	</SettingGroup>
+	<SettingGroup Name="Editor\Highlight\Modified line" Selected="true">
+		<Setting Name="Bold" DataType="1" Value="False"/>
+		<Setting Name="Italic" DataType="1" Value="False"/>
+		<Setting Name="Underline" DataType="1" Value="False"/>
+		<Setting Name="Default Foreground" DataType="1" Value="False"/>
+		<Setting Name="Default Background" DataType="1" Value="False"/>
+		<Setting Name="Foreground Color New" DataType="1" Value="clLime"/>
+		<Setting Name="Background Color New" DataType="1" Value="clYellow"/>
+	</SettingGroup>
+	<SettingGroup Name="Editor\Highlight\Number" Selected="true">
+		<Setting Name="Bold" DataType="1" Value="False"/>
+		<Setting Name="Italic" DataType="1" Value="False"/>
+		<Setting Name="Underline" DataType="1" Value="False"/>
+		<Setting Name="Default Foreground" DataType="1" Value="False"/>
+		<Setting Name="Default Background" DataType="1" Value="False"/>
+		<Setting Name="Foreground Color New" DataType="1" Value="$0064B5E8"/>
+		<Setting Name="Background Color New" DataType="1" Value="$001E1E1E"/>
+	</SettingGroup>
+	<SettingGroup Name="Editor\Highlight\Octal" Selected="true">
+		<Setting Name="Bold" DataType="1" Value="False"/>
+		<Setting Name="Italic" DataType="1" Value="False"/>
+		<Setting Name="Underline" DataType="1" Value="False"/>
+		<Setting Name="Default Foreground" DataType="1" Value="False"/>
+		<Setting Name="Default Background" DataType="1" Value="False"/>
+		<Setting Name="Foreground Color New" DataType="1" Value="$00DBC8F2"/>
+		<Setting Name="Background Color New" DataType="1" Value="$00323232"/>
+	</SettingGroup>
+	<SettingGroup Name="Editor\Highlight\Plain text" Selected="true">
+		<Setting Name="Bold" DataType="1" Value="False"/>
+		<Setting Name="Italic" DataType="1" Value="False"/>
+		<Setting Name="Underline" DataType="1" Value="False"/>
+		<Setting Name="Default Foreground" DataType="1" Value="False"/>
+		<Setting Name="Default Background" DataType="1" Value="False"/>
+		<Setting Name="Foreground Color New" DataType="1" Value="$00D4D4D4"/>
+		<Setting Name="Background Color New" DataType="1" Value="$001E1E1E"/>
+	</SettingGroup>
+	<SettingGroup Name="Editor\Highlight\Preprocessor" Selected="true">
+		<Setting Name="Bold" DataType="1" Value="False"/>
+		<Setting Name="Italic" DataType="1" Value="False"/>
+		<Setting Name="Underline" DataType="1" Value="False"/>
+		<Setting Name="Default Foreground" DataType="1" Value="False"/>
+		<Setting Name="Default Background" DataType="1" Value="False"/>
+		<Setting Name="Foreground Color New" DataType="1" Value="$00787878"/>
+		<Setting Name="Background Color New" DataType="1" Value="$001E1E1E"/>
+	</SettingGroup>
+	<SettingGroup Name="Editor\Highlight\Reserved word" Selected="true">
+		<Setting Name="Bold" DataType="1" Value="True"/>
+		<Setting Name="Italic" DataType="1" Value="False"/>
+		<Setting Name="Underline" DataType="1" Value="False"/>
+		<Setting Name="Default Foreground" DataType="1" Value="False"/>
+		<Setting Name="Default Background" DataType="1" Value="False"/>
+		<Setting Name="Foreground Color New" DataType="1" Value="$00B2783D"/>
+		<Setting Name="Background Color New" DataType="1" Value="$001E1E1E"/>
+	</SettingGroup>
+	<SettingGroup Name="Editor\Highlight\Right margin" Selected="true">
+		<Setting Name="Bold" DataType="1" Value="False"/>
+		<Setting Name="Italic" DataType="1" Value="False"/>
+		<Setting Name="Underline" DataType="1" Value="False"/>
+		<Setting Name="Default Foreground" DataType="1" Value="False"/>
+		<Setting Name="Default Background" DataType="1" Value="False"/>
+		<Setting Name="Foreground Color New" DataType="1" Value="$003C3C3C"/>
+		<Setting Name="Background Color New" DataType="1" Value="$00A0A0A0"/>
+	</SettingGroup>
+	<SettingGroup Name="Editor\Highlight\Scripts" Selected="true">
+		<Setting Name="Bold" DataType="1" Value="False"/>
+		<Setting Name="Italic" DataType="1" Value="False"/>
+		<Setting Name="Underline" DataType="1" Value="False"/>
+		<Setting Name="Default Foreground" DataType="1" Value="False"/>
+		<Setting Name="Default Background" DataType="1" Value="False"/>
+		<Setting Name="Foreground Color New" DataType="1" Value="clRed"/>
+		<Setting Name="Background Color New" DataType="1" Value="$00323232"/>
+	</SettingGroup>
+	<SettingGroup Name="Editor\Highlight\Search match" Selected="true">
+		<Setting Name="Bold" DataType="1" Value="False"/>
+		<Setting Name="Italic" DataType="1" Value="False"/>
+		<Setting Name="Underline" DataType="1" Value="False"/>
+		<Setting Name="Default Foreground" DataType="1" Value="False"/>
+		<Setting Name="Default Background" DataType="1" Value="False"/>
+		<Setting Name="Foreground Color New" DataType="1" Value="$0064B5E8"/>
+		<Setting Name="Background Color New" DataType="1" Value="$00685B50"/>
+	</SettingGroup>
+	<SettingGroup Name="Editor\Highlight\String" Selected="true">
+		<Setting Name="Bold" DataType="1" Value="False"/>
+		<Setting Name="Italic" DataType="1" Value="False"/>
+		<Setting Name="Underline" DataType="1" Value="False"/>
+		<Setting Name="Default Foreground" DataType="1" Value="False"/>
+		<Setting Name="Default Background" DataType="1" Value="False"/>
+		<Setting Name="Foreground Color New" DataType="1" Value="$00324CCB"/>
+		<Setting Name="Background Color New" DataType="1" Value="$001E1E1E"/>
+	</SettingGroup>
+	<SettingGroup Name="Editor\Highlight\Structural Highlighting" Selected="true">
+		<Setting Name="Enabled" DataType="1" Value="True"/>
+		<Setting Name="Color1" DataType="1" Value="$00FF86FF"/>
+		<Setting Name="Color2" DataType="1" Value="$00FE85CD"/>
+		<Setting Name="Color3" DataType="1" Value="$00F1A7B0"/>
+		<Setting Name="Color4" DataType="1" Value="$00E1CA7B"/>
+		<Setting Name="FlowControlEnabled" DataType="1" Value="True"/>
+		<Setting Name="FlowControlLocation" DataType="1" Value="1"/>
+		<Setting Name="ShowSingleLine" DataType="1" Value="True"/>
+	</SettingGroup>
+	<SettingGroup Name="Editor\Highlight\Symbol" Selected="true">
+		<Setting Name="Bold" DataType="1" Value="False"/>
+		<Setting Name="Italic" DataType="1" Value="False"/>
+		<Setting Name="Underline" DataType="1" Value="False"/>
+		<Setting Name="Default Foreground" DataType="1" Value="False"/>
+		<Setting Name="Default Background" DataType="1" Value="False"/>
+		<Setting Name="Foreground Color New" DataType="1" Value="$00A0A0A0"/>
+		<Setting Name="Background Color New" DataType="1" Value="$001E1E1E"/>
+	</SettingGroup>
+	<SettingGroup Name="Editor\Highlight\Sync edit background" Selected="true">
+		<Setting Name="Bold" DataType="1" Value="False"/>
+		<Setting Name="Italic" DataType="1" Value="False"/>
+		<Setting Name="Underline" DataType="1" Value="False"/>
+		<Setting Name="Default Foreground" DataType="1" Value="False"/>
+		<Setting Name="Default Background" DataType="1" Value="False"/>
+		<Setting Name="Foreground Color New" DataType="1" Value="$00D4D4D4"/>
+		<Setting Name="Background Color New" DataType="1" Value="$00403A34"/>
+	</SettingGroup>
+	<SettingGroup Name="Editor\Highlight\Sync edit highlight" Selected="true">
+		<Setting Name="Bold" DataType="1" Value="False"/>
+		<Setting Name="Italic" DataType="1" Value="False"/>
+		<Setting Name="Underline" DataType="1" Value="False"/>
+		<Setting Name="Default Foreground" DataType="1" Value="False"/>
+		<Setting Name="Default Background" DataType="1" Value="False"/>
+		<Setting Name="Foreground Color New" DataType="1" Value="$00AADCDC"/>
+		<Setting Name="Background Color New" DataType="1" Value="$00D4D4D4"/>
+	</SettingGroup>
+	<SettingGroup Name="Editor\Highlight\Tags" Selected="true">
+		<Setting Name="Bold" DataType="1" Value="True"/>
+		<Setting Name="Italic" DataType="1" Value="False"/>
+		<Setting Name="Underline" DataType="1" Value="False"/>
+		<Setting Name="Default Foreground" DataType="1" Value="False"/>
+		<Setting Name="Default Background" DataType="1" Value="False"/>
+		<Setting Name="Foreground Color New" DataType="1" Value="$00E4D0B1"/>
+		<Setting Name="Background Color New" DataType="1" Value="$00323232"/>
+	</SettingGroup>
+	<SettingGroup Name="Editor\Highlight\Whitespace" Selected="true">
+		<Setting Name="Bold" DataType="1" Value="False"/>
+		<Setting Name="Italic" DataType="1" Value="False"/>
+		<Setting Name="Underline" DataType="1" Value="False"/>
+		<Setting Name="Default Foreground" DataType="1" Value="False"/>
+		<Setting Name="Default Background" DataType="1" Value="False"/>
+		<Setting Name="Foreground Color New" DataType="1" Value="$00FFFEFA"/>
+		<Setting Name="Background Color New" DataType="1" Value="$001E1E1E"/>
+	</SettingGroup>
+</AppSettings>
