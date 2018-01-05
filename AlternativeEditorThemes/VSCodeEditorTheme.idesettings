@@ -203,9 +203,9 @@
 		<Setting Name="Bold" DataType="1" Value="False"/>
 		<Setting Name="Italic" DataType="1" Value="False"/>
 		<Setting Name="Underline" DataType="1" Value="False"/>
-		<Setting Name="Default Foreground" DataType="1" Value="False"/>
+		<Setting Name="Default Foreground" DataType="1" Value="True"/>
 		<Setting Name="Default Background" DataType="1" Value="False"/>
-		<Setting Name="Foreground Color New" DataType="1" Value="clWhite"/>
+		<Setting Name="Foreground Color New" DataType="1" Value="clBlack"/>
 		<Setting Name="Background Color New" DataType="1" Value="$00282828"/>
 	</SettingGroup>
 	<SettingGroup Name="Editor\Highlight\Line Number" Selected="true">
