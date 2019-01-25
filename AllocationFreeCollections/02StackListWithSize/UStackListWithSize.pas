@@ -62,8 +62,13 @@ begin
   if (FCount >= FCapacity) then
     raise EInvalidOperation.Create('List is full');
 
-  Target := P(IntPtr(@FData) + (FCount * SizeOf(T)));
+  {$POINTERMATH ON}
+  Target := P(@FData) + FCount;
+
+//  Target := @FData;
+//  Inc(Target, FCount);
   Target^ := AItem;
+
   Inc(FCount);
 end;
 
@@ -79,7 +84,8 @@ begin
   if (AIndex < 0) or (AIndex >= FCount) then
     raise EArgumentOutOfRangeException.Create('List index out of range');
 
-  Item := P(IntPtr(@FData) + (AIndex * SizeOf(T)));
+  Item := @FData;
+  Inc(Item, AIndex);
   Result := Item^;
 end;
 

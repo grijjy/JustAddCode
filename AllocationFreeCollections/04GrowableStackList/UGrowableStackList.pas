@@ -77,8 +77,11 @@ var
   Index: Integer;
 begin
   if (FCount < FStackCapacity) then
+  begin
     { We can still add this item to the memory stack. }
-    Target := P(IntPtr(@FStackData) + (FCount * SizeOf(T)))
+    Target := @FStackData;
+    Inc(Target, FCount);
+  end
   else
   begin
     { We need to add this item to heap memory.
@@ -89,7 +92,8 @@ begin
     if (Index >= FHeapCapacity) then
       Grow;
 
-    Target := P(IntPtr(FHeapData) + (Index * SizeOf(T)))
+    Target := FHeapData;
+    Inc(Target, Index);
   end;
 
   Target^ := AItem;
@@ -122,9 +126,15 @@ begin
     raise EArgumentOutOfRangeException.Create('List index out of range');
 
   if (AIndex < FStackCapacity) then
-    Item := P(IntPtr(@FStackData) + (AIndex * SizeOf(T)))
+  begin
+    Item := @FStackData;
+    Inc(Item, AIndex);
+  end
   else
-    Item := P(IntPtr(FHeapData) + ((AIndex - FStackCapacity) * SizeOf(T)));
+  begin
+    Item := FHeapData;
+    Inc(Item, AIndex - FStackCapacity);
+  end;
 
   Result := Item^;
 end;
