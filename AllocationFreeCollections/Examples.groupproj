@@ -1,0 +1,72 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{D33755A6-8D75-47C2-A878-74FC15D646FD}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="01SimpleStackList\E01SimpleStackList.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="02StackListWithSize\E02StackListWithSize.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="03StackListWithManagedTypes\E03StackListWithManagedTypes.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="04GrowableStackList\E04GrowableStackList.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="E01SimpleStackList">
+        <MSBuild Projects="01SimpleStackList\E01SimpleStackList.dproj"/>
+    </Target>
+    <Target Name="E01SimpleStackList:Clean">
+        <MSBuild Projects="01SimpleStackList\E01SimpleStackList.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="E01SimpleStackList:Make">
+        <MSBuild Projects="01SimpleStackList\E01SimpleStackList.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="E02StackListWithSize">
+        <MSBuild Projects="02StackListWithSize\E02StackListWithSize.dproj"/>
+    </Target>
+    <Target Name="E02StackListWithSize:Clean">
+        <MSBuild Projects="02StackListWithSize\E02StackListWithSize.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="E02StackListWithSize:Make">
+        <MSBuild Projects="02StackListWithSize\E02StackListWithSize.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="E03StackListWithManagedTypes">
+        <MSBuild Projects="03StackListWithManagedTypes\E03StackListWithManagedTypes.dproj"/>
+    </Target>
+    <Target Name="E03StackListWithManagedTypes:Clean">
+        <MSBuild Projects="03StackListWithManagedTypes\E03StackListWithManagedTypes.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="E03StackListWithManagedTypes:Make">
+        <MSBuild Projects="03StackListWithManagedTypes\E03StackListWithManagedTypes.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="E04GrowableStackList">
+        <MSBuild Projects="04GrowableStackList\E04GrowableStackList.dproj"/>
+    </Target>
+    <Target Name="E04GrowableStackList:Clean">
+        <MSBuild Projects="04GrowableStackList\E04GrowableStackList.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="E04GrowableStackList:Make">
+        <MSBuild Projects="04GrowableStackList\E04GrowableStackList.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="E01SimpleStackList;E02StackListWithSize;E03StackListWithManagedTypes;E04GrowableStackList"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="E01SimpleStackList:Clean;E02StackListWithSize:Clean;E03StackListWithManagedTypes:Clean;E04GrowableStackList:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="E01SimpleStackList:Make;E02StackListWithSize:Make;E03StackListWithManagedTypes:Make;E04GrowableStackList:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>
