@@ -15,6 +15,9 @@
         <Projects Include="04GrowableStackList\E04GrowableStackList.dproj">
             <Dependencies/>
         </Projects>
+        <Projects Include="SpeedTests\SpeedTests.dproj">
+            <Dependencies/>
+        </Projects>
     </ItemGroup>
     <ProjectExtensions>
         <Borland.Personality>Default.Personality.12</Borland.Personality>
@@ -59,14 +62,23 @@
     <Target Name="E04GrowableStackList:Make">
         <MSBuild Projects="04GrowableStackList\E04GrowableStackList.dproj" Targets="Make"/>
     </Target>
+    <Target Name="SpeedTests">
+        <MSBuild Projects="SpeedTests\SpeedTests.dproj"/>
+    </Target>
+    <Target Name="SpeedTests:Clean">
+        <MSBuild Projects="SpeedTests\SpeedTests.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="SpeedTests:Make">
+        <MSBuild Projects="SpeedTests\SpeedTests.dproj" Targets="Make"/>
+    </Target>
     <Target Name="Build">
-        <CallTarget Targets="E01SimpleStackList;E02StackListWithSize;E03StackListWithManagedTypes;E04GrowableStackList"/>
+        <CallTarget Targets="E01SimpleStackList;E02StackListWithSize;E03StackListWithManagedTypes;E04GrowableStackList;SpeedTests"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="E01SimpleStackList:Clean;E02StackListWithSize:Clean;E03StackListWithManagedTypes:Clean;E04GrowableStackList:Clean"/>
+        <CallTarget Targets="E01SimpleStackList:Clean;E02StackListWithSize:Clean;E03StackListWithManagedTypes:Clean;E04GrowableStackList:Clean;SpeedTests:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="E01SimpleStackList:Make;E02StackListWithSize:Make;E03StackListWithManagedTypes:Make;E04GrowableStackList:Make"/>
+        <CallTarget Targets="E01SimpleStackList:Make;E02StackListWithSize:Make;E03StackListWithManagedTypes:Make;E04GrowableStackList:Make;SpeedTests:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

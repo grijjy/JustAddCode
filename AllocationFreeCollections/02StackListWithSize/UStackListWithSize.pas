@@ -62,11 +62,8 @@ begin
   if (FCount >= FCapacity) then
     raise EInvalidOperation.Create('List is full');
 
-  {$POINTERMATH ON}
-  Target := P(@FData) + FCount;
-
-//  Target := @FData;
-//  Inc(Target, FCount);
+  Target := @FData;
+  Inc(Target, FCount);
   Target^ := AItem;
 
   Inc(FCount);
