@@ -448,6 +448,8 @@ begin
     CallStack := nil;
     if (AExceptionObject = nil) then
       ExceptionMessage := 'Unknown Error'
+    else if (AExceptionObject is EAbort) then
+      //  do nothing
     else if (AExceptionObject is Exception) then
     begin
       E := Exception(AExceptionObject);
