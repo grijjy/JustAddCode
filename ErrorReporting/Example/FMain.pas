@@ -206,17 +206,6 @@ begin
   Assert(M is TgoExceptionReportMessage);
   Report := TgoExceptionReportMessage(M).Report;
 
-  { Save report to Documents folder.
-    On Android, use the Shared Documents folder for easier access (this folder
-    is not supported on iOS) }
-  TFile.WriteAllText(
-    {$IFDEF ANDROID}
-    TPath.Combine(TPath.GetSharedDocumentsPath, 'ErrorReport.txt'),
-    {$ELSE}
-    TPath.Combine(TPath.GetDocumentsPath, 'ErrorReport.txt'),
-    {$ENDIF}
-    Report.Report);
-
   { This message can be sent from any thread. So if we want to show the report
     in the UI, we need to synchronize it with the main thread. We use
     TThread.Queue here so it doesn't block. }
