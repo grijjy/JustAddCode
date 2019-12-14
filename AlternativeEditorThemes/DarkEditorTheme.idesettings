@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<AppSettings version="25.0">
+<AppSettings version="26.0">
 	<SettingGroup Name="Editor\Highlight" Selected="true"/>
 	<SettingGroup Name="Editor\Highlight\Additional search match highlight" Selected="true">
 		<Setting Name="Bold" DataType="1" Value="False"/>
