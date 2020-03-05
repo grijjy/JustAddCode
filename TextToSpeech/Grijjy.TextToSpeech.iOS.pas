@@ -4,6 +4,7 @@ unit Grijjy.TextToSpeech.iOS;
 interface
 
 uses
+  System.Classes,      //Om: for TStrings
   Macapi.ObjectiveC,
   iOSapi.Foundation,
   iOSapi.CocoaTypes,
@@ -31,6 +32,9 @@ type
   AVSpeechSynthesisVoice = interface(NSObject)
   ['{FBFD24DF-08F6-43A3-8A9B-32D583B0B8B5}']
     function language: NSString; cdecl;
+    // Om: added the fns below
+    function identifier: NSString; cdecl;   //Om: from https://github.com/FMXExpress/ios-object-pascal-wrapper/blob/master/iOSapi.AVFoundation.pas
+    function name: NSString; cdecl;         //Om:
   end;
 
   TAVSpeechSynthesisVoice = class(TOCGenericImport<AVSpeechSynthesisVoiceClass, AVSpeechSynthesisVoice>) end;
@@ -127,18 +131,27 @@ type
   private
     FSpeechSynthesizer: AVSpeechSynthesizer;
     FDelegate: TDelegate;
+
+    fNativeVoice:AVSpeechSynthesisVoice;  //Om:
+
+    fMaleVoice, fFemaleVoice: AVSpeechSynthesisVoice;
+
   protected
+    Procedure getNativeVoice(const aVoiceSpec:String);  // aVoiceSpec in format 'pt-BR'
     { IgoTextToSpeech }
+    function getVoices(aList:TStrings):boolean; override;   // Om: mar20: get list of available voices ( only for iOS at this time)
+
     function Speak(const AText: String): Boolean; override;
     procedure Stop; override;
     function IsSpeaking: Boolean; override;
   {$ENDREGION 'Internal Declarations'}
+
   public
     constructor Create;
     destructor Destroy; override;
   end;
 
-implementation
+implementation //---------------------------------------------------
 
 uses
   System.SysUtils,
@@ -153,6 +166,12 @@ begin
   FDelegate := TgoTextToSpeechImplementation.TDelegate.Create(Self);
   FSpeechSynthesizer.setDelegate(FDelegate);
   Available := True;
+
+  fNativeVoice := nil;       //not set yet
+  fMaleVoice   := nil;
+  fFemaleVoice := nil;
+
+  getNativeVoice('pt-BR');   //on iOS, choose 'Luciana's'  pt-BR
 end;
 
 destructor TgoTextToSpeechImplementation.Destroy;
@@ -160,6 +179,71 @@ begin
   if (FSpeechSynthesizer <> nil) then
     FSpeechSynthesizer.release;
   inherited;
+end;
+
+// Om: mar20:
+Procedure TgoTextToSpeechImplementation.getNativeVoice(const aVoiceSpec:String);  // aVoiceSpec in format 'pt-BR'
+var
+  aLangArray:NSArray;
+  aVoice:AVSpeechSynthesisVoice;
+  i:integer;
+  Slang,Sname:String;
+begin
+  fNativeVoice := nil;
+  fMaleVoice   := nil;
+  fFemaleVoice := nil;
+
+  aLangArray := TAVSpeechSynthesisVoice.OCClass.speechVoices;  //get list of voices
+  for i:=0 to aLangArray.count-1 do
+    begin
+      aVoice := TAVSpeechSynthesisVoice.Wrap( aLangArray.objectAtIndex(i) );
+      Slang  := NSStrToStr( aVoice.language );
+      Sname  := NSStrToStr( aVoice.name );
+
+      if (Slang='pt-BR') then
+        begin
+           if ( Copy(Sname,1,7)='Luciana' ) then // '1234567'
+             fFemaleVoice := aVoice;             // 'Luciana'    casuismos ! :(
+
+           if ( Copy(Sname,1,6)='Felipe' )  then // '123456'
+             fMaleVoice := aVoice;               // 'Felipe'
+        end
+    end;
+
+    if Assigned(fMaleVoice)    then  fNativeVoice := fMaleVoice;
+    if Assigned(fFemaleVoice)  then  fNativeVoice := fFemaleVoice;   //default = female
+end;
+
+// Om:
+function TgoTextToSpeechImplementation.getVoices(aList: TStrings): boolean;
+var
+  aLangArray:NSArray;
+  aVoice:AVSpeechSynthesisVoice;
+  i:integer;
+  Slang,Sname,SIdentifier:String;
+
+begin
+  Result     := false;
+  aLangArray := TAVSpeechSynthesisVoice.OCClass.speechVoices;  //get list of voices
+  for i:=0 to aLangArray.count-1 do
+    begin
+      aVoice := TAVSpeechSynthesisVoice.Wrap( aLangArray.objectAtIndex(i) );  //pode?
+
+      Slang      := NSStrToStr( aVoice.language );
+      Sname       := NSStrToStr( aVoice.name );
+      SIdentifier := NSStrToStr( aVoice.identifier );
+
+      aList.Add( IntToStr(i)+' '+Slang );
+      aList.Add( Sname                  );
+      aList.Add( SIdentifier            );
+
+      //if (Slang='pt-PT') then
+      //   fNativeVoice := aVoice;  //save native voice
+
+      Result := true;
+    end;
+
+  aList.Add('current voice: '+ NSStrToStr( TAVSpeechSynthesisVoice.OCClass.currentLanguageCode ) );
 end;
 
 function TgoTextToSpeechImplementation.IsSpeaking: Boolean;
@@ -170,6 +254,8 @@ end;
 function TgoTextToSpeechImplementation.Speak(const AText: String): Boolean;
 var
   Utterance: AVSpeechUtterance;
+  aVoice:AVSpeechSynthesisVoice;  //AVSpeechSynthesisVoice;
+
 begin
   if (AText.Trim = '') then
     Exit(True);
@@ -185,8 +271,20 @@ begin
   end;
 
   Utterance := TAVSpeechUtterance.OCClass.speechUtteranceWithString(StrToNSStr(AText));
+
+  // Om: Use saved voice, if any
+  if Assigned(fFemaleVoice) and Assigned(fMaleVoice) then      //alternating male-female voices
+     begin
+       if (fNativeVoice=fFemaleVoice) then fNativeVoice:=fMaleVoice
+         else fNativeVoice:=fFemaleVoice;
+     end;
+
+  if Assigned(fNativeVoice) then
+    Utterance.setVoice(fNativeVoice);
+
   if (not TOSVersion.Check(9)) then
     Utterance.setRate(DEFAULT_SPEECH_RATE_IOS8_DOWN);
+
   FSpeechSynthesizer.speakUtterance(Utterance);
   Result := True;
 end;

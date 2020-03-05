@@ -1,9 +1,13 @@
 unit Grijjy.TextToSpeech.Android;
 {< Text To Speech engine implementation for Android }
 
+// Om: prefix = changes by oMAR mar20
+
 interface
 
 uses
+  System.Classes,  //Om: for TStrings
+
   Androidapi.JNIBridge,
   Androidapi.JNI.JavaTypes,
   {$IF RTLVersion >= 31}
@@ -220,6 +224,8 @@ type
     procedure Initialize(const AStatus: Integer);
   protected
     { IgoTextToSpeech }
+    function getVoices(aList:TStrings):boolean; override;   // Om: mar20: get list of available voices ( only for iOS at this time)
+
     function Speak(const AText: String): Boolean; override;
     procedure Stop; override;
     function IsSpeaking: Boolean; override;
@@ -241,6 +247,23 @@ begin
   inherited;
   FInitListener := TInitListener.Create(Self);
   FTextToSpeech := TJTextToSpeech.JavaClass.init(TAndroidHelper.Context, FInitListener);
+end;
+
+// Om: mar20:
+function TgoTextToSpeechImplementation.getVoices(aList: TStrings): boolean;
+var aVoicesLst:JSet;
+    it:Jiterator;
+    v :JVoice;
+begin
+  Result := false;
+  aVoicesLst := FTextToSpeech.getVoices;
+  it := aVoicesLst.iterator;
+  while it.hasNext do
+  begin
+    v := TJVoice.Wrap( it.next );
+    aList.Add( jstringtostring( v.getName ));
+    Result := true;
+  end;
 end;
 
 procedure TgoTextToSpeechImplementation.Initialize(const AStatus: Integer);
@@ -320,8 +343,7 @@ begin
   FImplementation := AImplementation;
 end;
 
-procedure TgoTextToSpeechImplementation.TCompletedListener.onUtteranceCompleted(
-  utteranceId: JString);
+procedure TgoTextToSpeechImplementation.TCompletedListener.onUtteranceCompleted( utteranceId: JString);
 begin
   if Assigned(FImplementation) then
   begin
