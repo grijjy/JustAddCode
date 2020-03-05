@@ -425,3 +425,4 @@ end;
 We pass the hash map we created before, as well as a `QUEUE_FLUSH` flag that is used to tell the engine to terminate any current speech.
 
 Omar: mar20\: Forked the project to add getVoices ( a list of voices available to Text-to-speech )
+              for iOS and Android  
