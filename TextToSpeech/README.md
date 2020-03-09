@@ -5,13 +5,13 @@ The code in this directory is a small exercise in designing a cross platform abs
 If you are only interested in the end result, then you can stick to the first part of this document and bail when we get to the implementation details.
 
 # In this Fork, by oMAR mar20
-* Add getVoices ( a list of voices available to Text-to-speech - This is returnes in a TStrings variable )
+* Add getVoices ( a list of voices available to Text-to-speech - returns voice descriptions on a TStrings )
 status: Ok for iOS, Android and Windows 
-* Capture one male and one female voices, to allow 2 person dialogs.
-* Set voices alternating, one line at a time
+* Capture one male and one female voices, to allow 2 person dialog
+* Set voices alternating, one line at a time ( one for the guy, one for the girl )
    ok for iOS and Android. Not working for Windows.
-   Windows SAPI COM code needs fixing, for selection voices
-Hard coded voice selection    
+   Windows SAPI COM code needs fixing, to do voice selection
+   Hard coded voice selection ( pt-BR )    <-- fix that
 - for iOS there are one male and one female voices available in portuguese-BR
 - for Android, there is a brasilian male voice and a spanish-mexican female that kinda make a funny couple :) 
 
