@@ -28,6 +28,7 @@ type
     procedure _SetOnSpeechStarted(const AValue: TNotifyEvent);
 
     function getVoices(aList:TStrings):boolean; virtual; abstract;   // Om: mar20: get list of available voices ( only for iOS at this time)
+    function getVoiceGender:TVoiceGender;       virtual; abstract;   // Om: mar20:
 
     function Speak(const AText: String): Boolean; virtual; abstract;
     procedure Stop; virtual; abstract;

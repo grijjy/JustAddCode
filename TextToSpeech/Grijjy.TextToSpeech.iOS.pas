@@ -9,6 +9,7 @@ uses
   iOSapi.Foundation,
   iOSapi.CocoaTypes,
   iOSapi.AVFoundation,
+  Grijjy.TextToSpeech,
   Grijjy.TextToSpeech.Base;
 
 { These declarations are missing from iOSapi.AVFoundation }
@@ -140,6 +141,8 @@ type
     Procedure getNativeVoice(const aVoiceSpec:String);  // aVoiceSpec in format 'pt-BR'
     { IgoTextToSpeech }
     function getVoices(aList:TStrings):boolean; override;   // Om: mar20: get list of available voices ( only for iOS at this time)
+    function getVoiceGender:TVoiceGender;       override;   // Om: mar20:
+
 
     function Speak(const AText: String): Boolean; override;
     procedure Stop; override;
@@ -210,8 +213,8 @@ begin
         end
     end;
 
-    if Assigned(fMaleVoice)    then  fNativeVoice := fMaleVoice;
-    if Assigned(fFemaleVoice)  then  fNativeVoice := fFemaleVoice;   //default = female
+  if Assigned(fMaleVoice)    then  fNativeVoice := fMaleVoice;     //any voice will do, but..
+  if Assigned(fFemaleVoice)  then  fNativeVoice := fFemaleVoice;   //.. default = female
 end;
 
 // Om:
@@ -229,7 +232,7 @@ begin
     begin
       aVoice := TAVSpeechSynthesisVoice.Wrap( aLangArray.objectAtIndex(i) );  //pode?
 
-      Slang      := NSStrToStr( aVoice.language );
+      Slang       := NSStrToStr( aVoice.language );
       Sname       := NSStrToStr( aVoice.name );
       SIdentifier := NSStrToStr( aVoice.identifier );
 
@@ -244,6 +247,13 @@ begin
     end;
 
   aList.Add('current voice: '+ NSStrToStr( TAVSpeechSynthesisVoice.OCClass.currentLanguageCode ) );
+end;
+
+function TgoTextToSpeechImplementation.getVoiceGender:TVoiceGender;    // Om: mar20:
+begin
+  if    (fNativeVoice=fFemaleVoice) then Result := vgFemale
+  else if (fNativeVoice=fMaleVoice) then Result := vgMale
+  else Result := vgUnkown;
 end;
 
 function TgoTextToSpeechImplementation.IsSpeaking: Boolean;
