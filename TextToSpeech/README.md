@@ -15,6 +15,8 @@ status: Ok for iOS, Android and Windows
 - for iOS there are one male and one female voices available in portuguese-BR
 - for Android, there is a brasilian male voice and a spanish-mexican female that kinda make a funny couple :) 
 
+Om: changes to original JustAddCode code prefixed by "Om:"
+
 ## Choosing a feature set
 
 A common issue with abstracting platform differences is that you must decide on a feature set. A specific feature may be supported on one platform, but not on another. When it comes to text-to-speech, some platforms support choosing a voice, changing the pitch or speech rate, customize pronunciation with markup in the text to speak etc. Other platforms may not support some of these features, or only in an incompatible way.
