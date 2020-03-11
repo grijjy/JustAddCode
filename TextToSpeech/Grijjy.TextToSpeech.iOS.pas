@@ -138,15 +138,15 @@ type
     fMaleVoice, fFemaleVoice: AVSpeechSynthesisVoice;
 
   protected
-    Procedure getNativeVoice(const aVoiceSpec:String);  // aVoiceSpec in format 'pt-BR'
+    Procedure getNativeVoice(const aVoiceLang:String);  // aVoiceSpec in format 'pt-BR'
     { IgoTextToSpeech }
     function getVoices(aList:TStrings):boolean; override;   // Om: mar20: get list of available voices ( only for iOS at this time)
     function getVoiceGender:TVoiceGender;       override;   // Om: mar20:
+    function setVoice(const aVoiceLang:String):boolean; override;  // Om: mar20: set voice w/ spec like 'pt-BR'
 
-
-    function Speak(const AText: String): Boolean; override;
+    function  Speak(const AText: String): Boolean; override;
     procedure Stop; override;
-    function IsSpeaking: Boolean; override;
+    function  IsSpeaking: Boolean; override;
   {$ENDREGION 'Internal Declarations'}
 
   public
@@ -154,11 +154,123 @@ type
     destructor Destroy; override;
   end;
 
+function getDeviceCountryCode:String;  //platform specific get country code
+function getOSLanguage:String;
+
+
 implementation //---------------------------------------------------
 
 uses
   System.SysUtils,
   Macapi.Helpers;
+
+
+// On iOS I could not find a way to tell male from female voices, so I made this little
+// table with guesses  :(     Not sure about the genders for the names from exotic places
+Type
+  RVoiceGenderRec=record
+    Lang:String;
+    VoiceName:String;
+    Gender:Char;
+  end;
+
+const
+  Num_iOS_Voices=59;
+  iOSVoiceGenders:Array[0..Num_iOS_Voices-1] of RVoiceGenderRec=(
+    ( Lang: 'ar-SA'; VoiceName : 'Maged';                 Gender:'f'),
+    ( Lang: 'cs-CZ'; VoiceName : 'Zuzana';                Gender:'f'),
+    ( Lang: 'da-DK'; VoiceName : 'Sara';                  Gender:'f'),
+    ( Lang: 'de-DE'; VoiceName : 'Anna';                  Gender:'f'),
+    ( Lang: 'de-DE'; VoiceName : 'Helena';                Gender:'f'),
+    ( Lang: 'de-DE'; VoiceName : 'Martin';                Gender:'m'),
+    ( Lang: 'el-GR'; VoiceName : 'Melina';                Gender:'f'),
+    ( Lang: 'en-AU'; VoiceName : 'Catherine';             Gender:'f'),
+    ( Lang: 'en-AU'; VoiceName : 'Gordon';                Gender:'m'),
+    ( Lang: 'en-AU'; VoiceName : 'Karen';                 Gender:'f'),
+    ( Lang: 'en-GB'; VoiceName : 'Arthur';                Gender:'m'),
+    ( Lang: 'en-GB'; VoiceName : 'Daniel';                Gender:'m'),
+    ( Lang: 'en-GB'; VoiceName : 'Martha';                Gender:'f'),
+    ( Lang: 'en-IE'; VoiceName : 'Moira';                 Gender:'f'),
+    ( Lang: 'en-IN'; VoiceName : 'Rishi';                 Gender:'m'), //?
+    ( Lang: 'en-US'; VoiceName : 'Aaron';                 Gender:'m'),
+    ( Lang: 'en-US'; VoiceName : 'Fred';                  Gender:'m'),
+    ( Lang: 'en-US'; VoiceName : 'Nicky';                 Gender:'f'),
+    ( Lang: 'en-US'; VoiceName : 'Samantha';              Gender:'f'),
+    ( Lang: 'en-ZA'; VoiceName : 'Tessa';                 Gender:'f'),
+    ( Lang: 'es-ES'; VoiceName : 'Mónica';                Gender:'f'),
+    ( Lang: 'es-MX'; VoiceName : 'Paulina';               Gender:'f'),
+    ( Lang: 'fi-FI'; VoiceName : 'Satu';                  Gender:'m'),
+    ( Lang: 'fr-CA'; VoiceName : 'Amélie';                Gender:'f'),
+    ( Lang: 'fr-FR'; VoiceName : 'Daniel';                Gender:'m'),
+    ( Lang: 'fr-FR'; VoiceName : 'Marie';                 Gender:'f'),
+    ( Lang: 'fr-FR'; VoiceName : 'Thomas';                Gender:'m'),
+    ( Lang: 'he-IL'; VoiceName : 'Carmit';                Gender:'m'),
+    ( Lang: 'hi-IN'; VoiceName : 'Lekha';                 Gender:'f'),
+    ( Lang: 'hu-HU'; VoiceName : 'Mariska';               Gender:'f'),
+    ( Lang: 'id-ID'; VoiceName : 'Damayantict';           Gender:'m'),
+    ( Lang: 'it-IT'; VoiceName : 'Alice';                 Gender:'f'),
+    ( Lang: 'ja-JP'; VoiceName : 'Hattori';               Gender:'m'),
+    ( Lang: 'ja-JP'; VoiceName : 'Kyoko';                 Gender:'f'),
+    ( Lang: 'ja-JP'; VoiceName : 'O-ren';                 Gender:'m'),
+    ( Lang: 'ko-KR'; VoiceName : 'Yuna';                  Gender:'f'),
+    ( Lang: 'nl-BE'; VoiceName : 'Ellen';                 Gender:'f'),
+    ( Lang: 'nl-NL'; VoiceName : 'Xander';                Gender:'m'),
+    ( Lang: 'no-NO'; VoiceName : 'Nora';                  Gender:'f'),
+    ( Lang: 'pl-PL'; VoiceName : 'Zosia';                 Gender:'f'),
+    ( Lang: 'pt-BR'; VoiceName : 'Felipe (Aprimorado)';   Gender:'m'),
+    ( Lang: 'pt-BR'; VoiceName : 'Luciana (Aprimorado)';  Gender:'f'),
+    ( Lang: 'pt-BR'; VoiceName : 'Felipe';                Gender:'m'),
+    ( Lang: 'pt-BR'; VoiceName : 'Luciana';               Gender:'f'),
+    ( Lang: 'pt-PT'; VoiceName : 'Catarina (Aprimorado)'; Gender:'f'),
+    ( Lang: 'pt-PT'; VoiceName : 'Catarina';              Gender:'f'),
+    ( Lang: 'pt-PT'; VoiceName : 'Joana';                 Gender:'f'),
+    ( Lang: 'ro-RO'; VoiceName : 'Ioana';                 Gender:'f'),
+    ( Lang: 'ru-RU'; VoiceName : 'Milena';                Gender:'f'),
+    ( Lang: 'sk-SK'; VoiceName : 'Laura';                 Gender:'f'),
+    ( Lang: 'sv-SE'; VoiceName : 'Alva';                  Gender:'f'),
+    ( Lang: 'th-TH'; VoiceName : 'Kanya';                 Gender:'f'),
+    ( Lang: 'tr-TR'; VoiceName : 'Yelda';                 Gender:'f'),
+    ( Lang: 'zh-CN'; VoiceName : 'Li-mu';                 Gender:'f'),
+    ( Lang: 'zh-CN'; VoiceName : 'Tian-Tian';             Gender:'m'),
+    ( Lang: 'zh-CN'; VoiceName : 'Yu-shu';                Gender:'f'),
+    ( Lang: 'zh-HK'; VoiceName : 'Sin-Ji';                Gender:'f'),
+    ( Lang: 'zh-TW'; VoiceName : 'Mei-Jia';               Gender:'m'),
+    ( Lang: 'en-US'; VoiceName : 'Alex';                  Gender:'m') );
+
+function getGenderOfName(const aName:String):Char;  // Name --> gender on iOS ( 'm' or 'f')
+var i:integer;
+begin
+  Result := '?';  //unknown
+  for i:=0 to Num_iOS_Voices-1 do
+    if CompareText(iOSVoiceGenders[i].VoiceName,aName)=0 then  //found
+      begin
+         Result := iOSVoiceGenders[i].Gender;
+         exit;
+      end;
+end;
+
+function getDeviceCountryCode:String;
+const FoundationFwk: string = '/System/Library/Frameworks/Foundation.framework/Foundation';
+var
+  CurrentLocale: NSLocale;
+  CountryISO: NSString;
+begin
+  Result:='Unknown';
+
+  CurrentLocale := TNSLocale.Wrap(TNSLocale.OCClass.currentLocale);
+  CountryISO := TNSString.Wrap(CurrentLocale.objectForKey((CocoaNSStringConst(FoundationFwk, 'NSLocaleCountryCode') as ILocalObject).GetObjectID));
+  Result := UTF8ToString(CountryISO.UTF8String);
+
+  if (Length(Result)>2) then Delete(Result, 3, MaxInt);   //trim tail
+end;
+
+function getOSLanguage:String;
+var
+  Languages: NSArray;
+begin
+  Languages := TNSLocale.OCClass.preferredLanguages;
+  Result := TNSString.Wrap(Languages.objectAtIndex(0)).UTF8String;
+end;
 
 { TgoTextToSpeechImplementation }
 
@@ -170,11 +282,12 @@ begin
   FSpeechSynthesizer.setDelegate(FDelegate);
   Available := True;
 
-  fNativeVoice := nil;       //not set yet
+  fNativeVoice := nil;       // not set yet
+  // alternating mode: One line for the boy, one for the girl
   fMaleVoice   := nil;
   fFemaleVoice := nil;
 
-  getNativeVoice('pt-BR');   //on iOS, choose 'Luciana's'  pt-BR
+  getNativeVoice('pt');   //on iOS, choose 'Luciana's'  pt-BR
 end;
 
 destructor TgoTextToSpeechImplementation.Destroy;
@@ -185,7 +298,7 @@ begin
 end;
 
 // Om: mar20:
-Procedure TgoTextToSpeechImplementation.getNativeVoice(const aVoiceSpec:String);  // aVoiceSpec in format 'pt-BR'
+Procedure TgoTextToSpeechImplementation.getNativeVoice(const aVoiceLang:String);  // aVoiceLang in format 'pt'
 var
   aLangArray:NSArray;
   aVoice:AVSpeechSynthesisVoice;
@@ -232,9 +345,9 @@ begin
     begin
       aVoice := TAVSpeechSynthesisVoice.Wrap( aLangArray.objectAtIndex(i) );  //pode?
 
-      Slang       := NSStrToStr( aVoice.language );
-      Sname       := NSStrToStr( aVoice.name );
-      SIdentifier := NSStrToStr( aVoice.identifier );
+      Slang       := NSStrToStr( aVoice.language );     // 'pt-BR'
+      Sname       := NSStrToStr( aVoice.name );         // 'Fred'
+      SIdentifier := NSStrToStr( aVoice.identifier );   // 'com.apple.ttsbundle_fred-compact'
 
       aList.Add( IntToStr(i)+' '+Slang );
       aList.Add( Sname                  );
@@ -254,6 +367,48 @@ begin
   if    (fNativeVoice=fFemaleVoice) then Result := vgFemale
   else if (fNativeVoice=fMaleVoice) then Result := vgMale
   else Result := vgUnkown;
+end;
+
+function TgoTextToSpeechImplementation.setVoice(const aVoiceLang:String):boolean;  // Om: mar20: set voice w/ spec like 'pt-BR'
+var
+  aLangArray:NSArray;
+  aVoice:AVSpeechSynthesisVoice;
+  i:integer;
+  Slang,Sname,sLangCode,sCountryCode:String;
+  Sex:Char;   // 'f' or 'm'
+begin
+  fNativeVoice := nil;
+  fMaleVoice   := nil;
+  fFemaleVoice := nil;
+
+  aLangArray := TAVSpeechSynthesisVoice.OCClass.speechVoices;  //get list of voices
+  for i:=0 to aLangArray.count-1 do
+    begin
+      aVoice := TAVSpeechSynthesisVoice.Wrap( aLangArray.objectAtIndex(i) );
+      Slang  := NSStrToStr( aVoice.language );    // 'pt-BR'
+      Sname  := Trim(NSStrToStr( aVoice.name ));        // 'Maria'
+
+      sLangCode    := Copy(Slang,1,2);   // 'pt'
+      sCountryCode := Copy(Slang,4,2);   // 'BR'
+      Sex          := getGenderOfName( Sname );
+
+      if CompareText(sLang, aVoiceLang)=0 then  //found language
+        begin
+          if (Sex='f') then fFemaleVoice := aVoice
+            else fMaleVoice := aVoice;
+
+          // Omar: add hoc
+          //  if ( Copy(Sname,1,7)='Luciana' ) then // '1234567'
+          //    fFemaleVoice := aVoice;             // 'Luciana'    casuismos ! :(
+          //
+          //  if ( Copy(Sname,1,6)='Felipe' )  then // '123456'
+          //    fMaleVoice := aVoice;               // 'Felipe'
+
+        end
+    end;
+
+  if Assigned(fMaleVoice)    then  fNativeVoice := fMaleVoice;     //any voice will do, but..
+  if Assigned(fFemaleVoice)  then  fNativeVoice := fFemaleVoice;   //.. default = female
 end;
 
 function TgoTextToSpeechImplementation.IsSpeaking: Boolean;

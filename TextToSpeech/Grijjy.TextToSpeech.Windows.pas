@@ -284,6 +284,8 @@ type
     { IgoTextToSpeech }
     function getVoices(aList:TStrings):boolean; override;   // Om: mar20: get list of available voices ( only for iOS at this time)
     function getVoiceGender:TVoiceGender;       override;   // Om: mar20:
+    function setVoice(const aVoiceLang:String):boolean; override;  // Om: mar20: set voice w/ spec like 'pt-BR'
+
 
     function Speak(const AText: String): Boolean; override;
     procedure Stop; override;
@@ -300,10 +302,10 @@ type
      fFemaleVoice :OLEVariant;
 
     constructor Create;
-    destructor Destroy; override;
+    destructor  Destroy; override;
   end;
 
-implementation
+implementation  //----------------------------------------------------------------------------
 
 uses
   System.Win.ComObj;
@@ -526,6 +528,12 @@ begin
   //      if      (not VarIsNull(fFemaleVoice) ) and (fNativeVoice.getDescription=fFemaleVoice.getDescription) then Result := vgFemale
   //      else if (not VarIsNull(fMaleVoice) )   and (fNativeVoice.getDescription=fMaleVoice.getDescription)   then Result := vgFemale;
   //    end;
+end;
+
+function TgoTextToSpeechImplementation.setVoice(const aVoiceLang:String ):boolean;  // Om: mar20: set voice w/ spec like 'pt-BR'
+begin
+  Result := false;      // not implemented
+  //TODO:
 end;
 
 function TgoTextToSpeechImplementation.Speak(const AText: String): Boolean;

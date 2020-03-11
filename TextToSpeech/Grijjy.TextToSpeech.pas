@@ -28,8 +28,9 @@ type
     procedure _SetOnSpeechStarted(const AValue: TNotifyEvent);
     {$ENDREGION 'Internal Declarations'}
 
-    function getVoices(aList:TStrings):boolean;    // Om: mar20: get list of available voices ( only for iOS at this time)
-    function getVoiceGender:TVoiceGender;
+    function  getVoices(aList:TStrings):boolean;         // Om: mar20: get list of available voices ( only for iOS at this time)
+    function  getVoiceGender:TVoiceGender;               // Om: mar20:
+    function  setVoice(const aVoiceLang:String):boolean; // Om: mar20: set voice w/ spec like 'pt' or 'en'  (lang-country)
 
     { Speaks a string of text.
 

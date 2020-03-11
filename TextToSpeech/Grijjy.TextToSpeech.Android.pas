@@ -7,9 +7,12 @@ interface
 
 uses
   System.Classes,  //Om: for TStrings
+  FMX.Platform,    //Om: plat services
 
   Androidapi.JNIBridge,
   Androidapi.JNI.JavaTypes,
+
+
   {$IF RTLVersion >= 31}
   Androidapi.JNI.Speech,
   {$ELSE}
@@ -231,8 +234,9 @@ type
     procedure getNativeVoices;
   protected
     { IgoTextToSpeech }
-    function getVoices(aList:TStrings):boolean; override;   // Om: mar20: get list of available voices ( only for iOS at this time)
-    function getVoiceGender:TVoiceGender;       override;   // Om: mar20:
+    function getVoices(aList:TStrings):boolean;          override;   // Om: mar20: get list of available voices ( only for iOS at this time)
+    function getVoiceGender:TVoiceGender;                override;  // Om: mar20:
+    function setVoice(const aVoiceLang:String):boolean;  override; // Om: mar20: set voice w/ spec like 'pt-br'  (lang-country)
 
     function  Speak(const AText: String): Boolean; override;
     procedure Stop; override;
@@ -242,11 +246,33 @@ type
     constructor Create;
   end;
 
-implementation
+// function getDeviceCountryCode:String;  //platform specific get country code
+
+
+implementation  //-----------------------------------
 
 uses
   System.SysUtils,
   Androidapi.Helpers;
+
+function getDeviceCountryCode:String;  //platform specific get country code
+var Locale: JLocale;
+begin
+  Result:='Unknown';
+
+  Locale := TJLocale.JavaClass.getDefault;
+  Result := JStringToString(Locale.getISO3Country);
+
+  if Length(Result) > 2 then Delete(Result, 3, MaxInt);
+end;
+
+function getOSLanguage:String;
+var LocServ: IFMXLocaleService;
+begin
+  if TPlatformServices.Current.SupportsPlatformService(IFMXLocaleService, IInterface(LocServ)) then
+    Result := LocServ.GetCurrentLangID
+    else Result := 'Unknown';
+end;
 
 { TgoTextToSpeechImplementation }
 
@@ -306,6 +332,49 @@ begin
   else Result := vgUnkown;
 end;
 
+function TgoTextToSpeechImplementation.setVoice(const aVoiceLang:String):boolean;  // Om: mar20: set voice w/ spec like 'pt-BR'
+var aVoicesLst:JSet;
+    it:Jiterator;
+    v :JVoice;
+    vname,vlang,vcountry,aLangCode,Lang2:String;
+    Sex:Char;
+
+begin
+  fNativeVoice := nil;
+  fMaleVoice   := nil;
+  fFemaleVoice := nil;
+
+  aVoicesLst := FTextToSpeech.getVoices;
+  it := aVoicesLst.iterator;
+
+  while it.hasNext do
+  begin
+    v := TJVoice.Wrap( it.next );                 //  123456789.123
+    vname     := jstringtostring( v.getName );    // 'es-MX-SMTf00'
+    aLangCode := Copy(vname,1,5);                 // 'es-MX'
+    Lang2     := Copy(vname,7,6);                 // 'SMTf00'
+    if (Pos('f',Lang2)>0) then Sex:='f' else Sex:='m';  //extract gender from Lang2
+
+    vlang    := jstringtostring( v.getLocale.getLanguage  );  // por
+    vcountry := jstringtostring( v.getLocale.getCountry   );  // BRA
+
+    if CompareText(aLangCode,aVoiceLang)=0 then  //found language
+      begin
+        if (Sex='f') then fFemaleVoice := v
+          else fMaleVoice := v;
+      end;
+
+    /// if ( CompareText(vlang,'por')=0 ) and ( CompareText(vcountry,'BRA')=0 ) then
+    //    fMaleVoice := v;    // CHECK: Can we save the inteface for latter use ?
+    //  // Android não tem brazuka mulher. Usa a mexicana..
+    //  if ( CompareText(vlang,'spa')=0 ) and ( CompareText(vcountry,'MEX')=0 ) then
+    //    fFemaleVoice := v;
+  end;
+
+  if Assigned(fMaleVoice)    then  fNativeVoice := fMaleVoice;     //any voice will do, but..
+  if Assigned(fFemaleVoice)  then  fNativeVoice := fFemaleVoice;   //.. default = female
+end;
+
 procedure TgoTextToSpeechImplementation.Initialize(const AStatus: Integer);
 begin
   FInitListener := nil;
@@ -352,7 +421,6 @@ begin
 
     if ( CompareText(vlang,'por')=0 ) and ( CompareText(vcountry,'BRA')=0 ) then
       fMaleVoice := v;    // CHECK: Can we save the inteface for latter use ?
-
     // não tem brazuka mulher. Usa a mexicana..
     if ( CompareText(vlang,'spa')=0 ) and ( CompareText(vcountry,'MEX')=0 ) then
       fFemaleVoice := v;
@@ -383,7 +451,7 @@ begin
        end;
 
     if Assigned(fNativeVoice) then
-      FTextToSpeech.setVoice(fNativeVoice);
+      FTextToSpeech.setVoice( fNativeVoice );
 
     Result := (FTextToSpeech.speak(StringToJString(AText),
       TJTextToSpeech.JavaClass.QUEUE_FLUSH, FParams) = TJTextToSpeech.JavaClass.SUCCESS);
