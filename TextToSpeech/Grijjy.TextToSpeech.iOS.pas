@@ -138,11 +138,11 @@ type
     fMaleVoice, fFemaleVoice: AVSpeechSynthesisVoice;
 
   protected
-    Procedure getNativeVoice(const aVoiceLang:String);  // aVoiceSpec in format 'pt-BR'
+    Procedure getNativeVoice(const aVoiceLang:String);  // aVoiceLang in format 'pt-BR'
     { IgoTextToSpeech }
     function getVoices(aList:TStrings):boolean; override;   // Om: mar20: get list of available voices ( only for iOS at this time)
     function getVoiceGender:TVoiceGender;       override;   // Om: mar20:
-    function setVoice(const aVoiceLang:String):boolean; override;  // Om: mar20: set voice w/ spec like 'pt-BR'
+    function setVoice(const aMaleVoiceLang,aFemaleVoiceLang:String):boolean; override;  // Om: mar20: set voice w/ spec like 'pt-BR'
 
     function  Speak(const AText: String): Boolean; override;
     procedure Stop; override;
@@ -287,7 +287,7 @@ begin
   fMaleVoice   := nil;
   fFemaleVoice := nil;
 
-  getNativeVoice('pt');   //on iOS, choose 'Luciana's'  pt-BR
+  getNativeVoice('pt-BR');   //on iOS, choose 'Luciana's'  pt-BR
 end;
 
 destructor TgoTextToSpeechImplementation.Destroy;
@@ -298,37 +298,43 @@ begin
 end;
 
 // Om: mar20:
-Procedure TgoTextToSpeechImplementation.getNativeVoice(const aVoiceLang:String);  // aVoiceLang in format 'pt'
-var
-  aLangArray:NSArray;
-  aVoice:AVSpeechSynthesisVoice;
-  i:integer;
-  Slang,Sname:String;
+Procedure TgoTextToSpeechImplementation.getNativeVoice(const aVoiceLang:String);  // aMaleVoiceLang,aFemaleVoiceLang in format 'pt'
 begin
-  fNativeVoice := nil;
-  fMaleVoice   := nil;
-  fFemaleVoice := nil;
-
-  aLangArray := TAVSpeechSynthesisVoice.OCClass.speechVoices;  //get list of voices
-  for i:=0 to aLangArray.count-1 do
-    begin
-      aVoice := TAVSpeechSynthesisVoice.Wrap( aLangArray.objectAtIndex(i) );
-      Slang  := NSStrToStr( aVoice.language );
-      Sname  := NSStrToStr( aVoice.name );
-
-      if (Slang='pt-BR') then
-        begin
-           if ( Copy(Sname,1,7)='Luciana' ) then // '1234567'
-             fFemaleVoice := aVoice;             // 'Luciana'    casuismos ! :(
-
-           if ( Copy(Sname,1,6)='Felipe' )  then // '123456'
-             fMaleVoice := aVoice;               // 'Felipe'
-        end
-    end;
-
-  if Assigned(fMaleVoice)    then  fNativeVoice := fMaleVoice;     //any voice will do, but..
-  if Assigned(fFemaleVoice)  then  fNativeVoice := fFemaleVoice;   //.. default = female
+  self.setVoice(aVoiceLang, aVoiceLang);  //both voices same lang
 end;
+
+// var
+//   aLangArray:NSArray;
+//   aVoice:AVSpeechSynthesisVoice;
+//   i:integer;
+//   Slang,Sname:String;
+// begin
+//   fNativeVoice := nil;
+//   fMaleVoice   := nil;
+//   fFemaleVoice := nil;
+//
+//   aLangArray := TAVSpeechSynthesisVoice.OCClass.speechVoices;  //get list of voices
+//   for i:=0 to aLangArray.count-1 do
+//     begin
+//       aVoice := TAVSpeechSynthesisVoice.Wrap( aLangArray.objectAtIndex(i) );
+//       Slang  := NSStrToStr( aVoice.language );
+//       Sname  := NSStrToStr( aVoice.name );
+//
+//
+//
+//       if (Slang='pt-BR') then
+//         begin
+//            if ( Copy(Sname,1,7)='Luciana' ) then // '1234567'
+//              fFemaleVoice := aVoice;             // 'Luciana'    casuismos ! :(
+//
+//            if ( Copy(Sname,1,6)='Felipe' )  then // '123456'
+//              fMaleVoice := aVoice;               // 'Felipe'
+//         end
+//     end;
+//
+//   if Assigned(fMaleVoice)    then  fNativeVoice := fMaleVoice;     //any voice will do, but..
+//   if Assigned(fFemaleVoice)  then  fNativeVoice := fFemaleVoice;   //.. default = female
+// end;
 
 // Om:
 function TgoTextToSpeechImplementation.getVoices(aList: TStrings): boolean;
@@ -369,7 +375,7 @@ begin
   else Result := vgUnkown;
 end;
 
-function TgoTextToSpeechImplementation.setVoice(const aVoiceLang:String):boolean;  // Om: mar20: set voice w/ spec like 'pt-BR'
+function TgoTextToSpeechImplementation.setVoice(const aMaleVoiceLang,aFemaleVoiceLang:String):boolean;  // Om: mar20: set voice w/ spec like 'pt-BR'
 var
   aLangArray:NSArray;
   aVoice:AVSpeechSynthesisVoice;
@@ -386,25 +392,26 @@ begin
     begin
       aVoice := TAVSpeechSynthesisVoice.Wrap( aLangArray.objectAtIndex(i) );
       Slang  := NSStrToStr( aVoice.language );    // 'pt-BR'
-      Sname  := Trim(NSStrToStr( aVoice.name ));        // 'Maria'
+      Sname  := Trim(NSStrToStr( aVoice.name ));  // 'Maria'
 
-      sLangCode    := Copy(Slang,1,2);   // 'pt'
-      sCountryCode := Copy(Slang,4,2);   // 'BR'
-      Sex          := getGenderOfName( Sname );
+      //sLangCode    := Copy(Slang,1,2);              // 'pt'
+      //sCountryCode := Copy(Slang,4,2);              // 'BR'
 
-      if CompareText(sLang, aVoiceLang)=0 then  //found language
-        begin
-          if (Sex='f') then fFemaleVoice := aVoice
-            else fMaleVoice := aVoice;
+      Sex    := getGenderOfName( Sname );
 
-          // Omar: add hoc
+      if (CompareText(sLang,aFemaleVoiceLang)=0) and (Sex='f') then  //found female voice language
+          fFemaleVoice := aVoice;
+
+      if (CompareText(sLang,aMaleVoiceLang)=0) and (Sex='m') then  //found male voice language
+          fMaleVoice := aVoice;
+
+          // Omar: ad hoc
           //  if ( Copy(Sname,1,7)='Luciana' ) then // '1234567'
           //    fFemaleVoice := aVoice;             // 'Luciana'    casuismos ! :(
           //
           //  if ( Copy(Sname,1,6)='Felipe' )  then // '123456'
           //    fMaleVoice := aVoice;               // 'Felipe'
 
-        end
     end;
 
   if Assigned(fMaleVoice)    then  fNativeVoice := fMaleVoice;     //any voice will do, but..

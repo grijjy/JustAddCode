@@ -225,7 +225,7 @@ type
     FParams: JHashMap;
     FSpeechStarted: Boolean;
 
-    fNativeVoice :JVoice;  //male and female voices
+    fNativeVoice :JVoice;        // male and female voices
     fMaleVoice   :JVoice;
     fFemaleVoice :JVoice;
 
@@ -236,7 +236,7 @@ type
     { IgoTextToSpeech }
     function getVoices(aList:TStrings):boolean;          override;   // Om: mar20: get list of available voices ( only for iOS at this time)
     function getVoiceGender:TVoiceGender;                override;  // Om: mar20:
-    function setVoice(const aVoiceLang:String):boolean;  override; // Om: mar20: set voice w/ spec like 'pt-br'  (lang-country)
+    function setVoice(const aMaleVoiceLang,aFemaleVoiceLang:String):boolean;  override; // Om: mar20: set voice w/ spec like 'pt-br'  (lang-country)
 
     function  Speak(const AText: String): Boolean; override;
     procedure Stop; override;
@@ -332,7 +332,7 @@ begin
   else Result := vgUnkown;
 end;
 
-function TgoTextToSpeechImplementation.setVoice(const aVoiceLang:String):boolean;  // Om: mar20: set voice w/ spec like 'pt-BR'
+function TgoTextToSpeechImplementation.setVoice(const aMaleVoiceLang,aFemaleVoiceLang:String):boolean;  // Om: mar20: set voice w/ spec like 'pt-BR'
 var aVoicesLst:JSet;
     it:Jiterator;
     v :JVoice;
@@ -358,11 +358,10 @@ begin
     vlang    := jstringtostring( v.getLocale.getLanguage  );  // por
     vcountry := jstringtostring( v.getLocale.getCountry   );  // BRA
 
-    if CompareText(aLangCode,aVoiceLang)=0 then  //found language
-      begin
-        if (Sex='f') then fFemaleVoice := v
-          else fMaleVoice := v;
-      end;
+    if (CompareText(aLangCode,aFemaleVoiceLang)=0) and (Sex='f') then  //found language
+      fFemaleVoice := v;
+    if (CompareText(aLangCode,aMaleVoiceLang)=0) and (Sex='m') then  //found language
+      fMaleVoice := v;
 
     /// if ( CompareText(vlang,'por')=0 ) and ( CompareText(vcountry,'BRA')=0 ) then
     //    fMaleVoice := v;    // CHECK: Can we save the inteface for latter use ?
@@ -419,6 +418,7 @@ begin
     vlang    := jstringtostring( v.getLocale.getLanguage  );  // por
     vcountry := jstringtostring( v.getLocale.getCountry   );  // BRA
 
+    //
     if ( CompareText(vlang,'por')=0 ) and ( CompareText(vcountry,'BRA')=0 ) then
       fMaleVoice := v;    // CHECK: Can we save the inteface for latter use ?
     // não tem brazuka mulher. Usa a mexicana..

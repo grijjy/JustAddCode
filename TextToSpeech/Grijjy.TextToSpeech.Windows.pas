@@ -284,7 +284,7 @@ type
     { IgoTextToSpeech }
     function getVoices(aList:TStrings):boolean; override;   // Om: mar20: get list of available voices ( only for iOS at this time)
     function getVoiceGender:TVoiceGender;       override;   // Om: mar20:
-    function setVoice(const aVoiceLang:String):boolean; override;  // Om: mar20: set voice w/ spec like 'pt-BR'
+    function setVoice(const aMaleVoiceLang,aFemaleVoiceLang:String):boolean; override;  // Om: mar20: set voice w/ spec like 'pt-BR'
 
 
     function Speak(const AText: String): Boolean; override;
@@ -530,7 +530,7 @@ begin
   //    end;
 end;
 
-function TgoTextToSpeechImplementation.setVoice(const aVoiceLang:String ):boolean;  // Om: mar20: set voice w/ spec like 'pt-BR'
+function TgoTextToSpeechImplementation.setVoice(const aMaleVoiceLang,aFemaleVoiceLang:String ):boolean;  // Om: mar20: set voice w/ spec like 'pt-BR'
 begin
   Result := false;      // not implemented
   //TODO:
