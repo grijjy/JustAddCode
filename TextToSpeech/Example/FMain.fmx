@@ -4,8 +4,8 @@ object FormMain: TFormMain
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = Single
   Caption = 'Text-to-Speech'
-  ClientHeight = 571
-  ClientWidth = 320
+  ClientHeight = 609
+  ClientWidth = 353
   Padding.Left = 8.000000000000000000
   Padding.Top = 8.000000000000000000
   Padding.Right = 8.000000000000000000
@@ -35,11 +35,11 @@ object FormMain: TFormMain
     Align = Top
     Position.X = 8.000000000000000000
     Position.Y = 8.000000000000000000
-    Size.Width = 304.000000000000000000
+    Size.Width = 337.000000000000000000
     Size.Height = 241.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 0
-    Viewport.Width = 296.000000000000000000
+    Viewport.Width = 329.000000000000000000
     Viewport.Height = 233.000000000000000000
   end
   object MemoLog: TMemo
@@ -48,34 +48,34 @@ object FormMain: TFormMain
     ReadOnly = True
     Align = Client
     Margins.Top = 8.000000000000000000
-    Size.Width = 304.000000000000000000
-    Size.Height = 202.000000000000000000
+    Size.Width = 337.000000000000000000
+    Size.Height = 216.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 1
-    Viewport.Width = 296.000000000000000000
-    Viewport.Height = 194.000000000000000000
+    Viewport.Width = 329.000000000000000000
+    Viewport.Height = 208.000000000000000000
   end
   object GridPanelLayout2: TGridPanelLayout
     Align = Top
     Margins.Top = 8.000000000000000000
     Position.X = 8.000000000000000000
     Position.Y = 257.000000000000000000
-    Size.Width = 304.000000000000000000
-    Size.Height = 96.000000000000000000
+    Size.Width = 337.000000000000000000
+    Size.Height = 120.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 2
     ColumnCollection = <
       item
-        Value = 26.078955814699900000
+        Value = 27.743880792792890000
       end
       item
-        Value = 26.121750294212050000
+        Value = 26.057342538116000000
       end
       item
-        Value = 23.964908526800040000
+        Value = 24.021623783121990000
       end
       item
-        Value = 23.834385364288010000
+        Value = 22.177152885969120000
       end>
     ControlCollection = <
       item
@@ -105,23 +105,32 @@ object FormMain: TFormMain
       end
       item
         Column = 1
-        Control = edVoiceLangCountry
+        Control = edFemaleVoiceLang
         Row = 1
       end
       item
         Column = 2
+        Control = edMaleVoiceLang
+        Row = 1
+      end
+      item
+        Column = 3
         Control = btnSetVoice
         Row = 1
       end>
     RowCollection = <
       item
-        Value = 50.000000000000000000
+        Value = 32.809194744060550000
       end
       item
-        Value = 50.000000000000000000
+        Value = 36.733478003726720000
       end
       item
         SizeStyle = Auto
+        Value = 30.000000000000000000
+      end
+      item
+        Value = 30.457327252212720000
       end>
     object ButtonSpeak: TButton
       Align = Top
@@ -129,7 +138,7 @@ object FormMain: TFormMain
       StyledSettings = [Family, Style, FontColor]
       Margins.Top = 8.000000000000000000
       Position.Y = 8.000000000000000000
-      Size.Width = 79.280029296875000000
+      Size.Width = 93.496879577636720000
       Size.Height = 29.000000000000000000
       Size.PlatformDefault = False
       TabOrder = 4
@@ -142,9 +151,9 @@ object FormMain: TFormMain
       Enabled = False
       StyledSettings = [Family, Style, FontColor]
       Margins.Top = 8.000000000000000000
-      Position.X = 79.280029296875000000
+      Position.X = 93.496879577636720000
       Position.Y = 8.000000000000000000
-      Size.Width = 79.410125732421880000
+      Size.Width = 87.813240051269530000
       Size.Height = 29.000000000000000000
       Size.PlatformDefault = False
       TabOrder = 3
@@ -156,9 +165,9 @@ object FormMain: TFormMain
       Align = Top
       StyledSettings = [Family, Style, FontColor]
       Margins.Top = 8.000000000000000000
-      Position.X = 158.690155029296900000
+      Position.X = 181.310119628906300000
       Position.Y = 8.000000000000000000
-      Size.Width = 72.853332519531250000
+      Size.Width = 80.952880859375000000
       Size.Height = 29.000000000000000000
       Size.PlatformDefault = False
       TabOrder = 2
@@ -170,9 +179,9 @@ object FormMain: TFormMain
       Align = Top
       StyledSettings = [Family, Style, FontColor]
       Margins.Top = 8.000000000000000000
-      Position.X = 231.543487548828100000
+      Position.X = 262.263000488281300000
       Position.Y = 8.000000000000000000
-      Size.Width = 72.456512451171880000
+      Size.Width = 74.736999511718750000
       Size.Height = 29.000000000000000000
       Size.PlatformDefault = False
       TabOrder = 1
@@ -183,35 +192,48 @@ object FormMain: TFormMain
     object Label1: TLabel
       Anchors = []
       StyledSettings = [Family, Style, FontColor]
-      Position.Y = 60.500000000000000000
-      Size.Width = 79.280029296875000000
+      Position.X = 8.045726776123047000
+      Position.Y = 49.911117553710940000
+      Size.Width = 77.405426025390630000
       Size.Height = 23.000000000000000000
       Size.PlatformDefault = False
       TextSettings.HorzAlign = Trailing
-      Text = 'Lang:'
+      Text = 'Voices:'
       TabOrder = 5
     end
-    object edVoiceLangCountry: TEdit
+    object edFemaleVoiceLang: TEdit
       Touch.InteractiveGestures = [LongTap, DoubleTap]
       Anchors = []
       StyleLookup = 'editstyle'
       TabOrder = 6
+      Text = 'es-MX'
+      Position.X = 104.403503417968800000
+      Position.Y = 46.411117553710940000
+      Size.Width = 66.000000000000000000
+      Size.Height = 30.000000000000000000
+      Size.PlatformDefault = False
+    end
+    object edMaleVoiceLang: TEdit
+      Touch.InteractiveGestures = [LongTap, DoubleTap]
+      Anchors = []
+      StyleLookup = 'editstyle'
+      TabOrder = 7
       Text = 'pt-BR'
-      Position.X = 79.280029296875000000
-      Position.Y = 57.000000000000000000
-      Size.Width = 79.410125732421880000
+      Position.X = 193.286560058593800000
+      Position.Y = 46.411117553710940000
+      Size.Width = 57.000000000000000000
       Size.Height = 30.000000000000000000
       Size.PlatformDefault = False
     end
     object btnSetVoice: TButton
       Anchors = []
-      Position.X = 171.116821289062500000
-      Position.Y = 50.000000000000000000
-      Size.Width = 48.000000000000000000
+      Position.X = 275.631530761718800000
+      Position.Y = 39.411117553710940000
+      Size.Width = 47.999969482421880000
       Size.Height = 44.000000000000000000
       Size.PlatformDefault = False
       StyleLookup = 'donetoolbutton'
-      TabOrder = 7
+      TabOrder = 8
       Text = 'ok'
       OnClick = btnSetVoiceClick
     end

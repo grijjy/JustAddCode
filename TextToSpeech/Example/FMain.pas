@@ -31,8 +31,9 @@ type
     btnListVoices: TButton;
     btnClearLog: TButton;
     Label1: TLabel;
-    edVoiceLangCountry: TEdit;
+    edFemaleVoiceLang: TEdit;
     btnSetVoice: TButton;
+    edMaleVoiceLang: TEdit;
     procedure FormCreate(Sender: TObject);
     procedure ButtonSpeakClick(Sender: TObject);
     procedure ButtonStopClick(Sender: TObject);
@@ -81,10 +82,13 @@ begin
 end;
 
 procedure TFormMain.btnSetVoiceClick(Sender: TObject);
-var aVoiceSpec:String;
+var aMV,aFV:String;
 begin
-  aVoiceSpec := Trim( edVoiceLangCountry.Text );     // 'pt-BR' 'en-US' 'sp-MX' ...
-  fTextToSpeech.SetVoice( aVoiceSpec );
+  // set male and female voices language
+  aMV :=  Trim( edMaleVoiceLang.Text );       // 'pt-BR' 'en-US' 'es-MX' ...
+  aFV :=  Trim( edFemaleVoiceLang.Text );
+
+  fTextToSpeech.SetVoice( aMV, aFV );
 end;
 
 procedure TFormMain.ButtonSpeakClick(Sender: TObject);  // <-- Do speak
