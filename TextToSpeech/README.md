@@ -15,6 +15,14 @@ status: Ok for iOS, Android and Windows
 - for iOS there are one male and one female voices available in portuguese-BR
 - for Android, there is a brasilian male voice and a spanish-mexican female that kinda make a funny couple :) 
 
+The example was expanded to:
+
+1) List voices avaivable on the Device. iOS lists all voices available ( 59 in my device). On Android I had to go to device Settings and download the desired voices, if not present. Make sure there are one male and one female voices avalable for your language. 
+
+2) Set language with language-country code (p.e. 'en-US', 'pt-BR' ..)
+
+This will capture both female and male voices, used to speak the script.
+
 Om: changes to original JustAddCode code prefixed by "Om:"
 
 check tiktok video: https://www.tiktok.com/@omar_reis/video/6802287150411877638
