@@ -104,6 +104,9 @@ type
     class function Create: IgoTextToSpeech; static;
   end;
 
+var
+  NativeSpeechLanguage:String='??-??';  // loaded at unit initialization
+
 implementation
 
 uses

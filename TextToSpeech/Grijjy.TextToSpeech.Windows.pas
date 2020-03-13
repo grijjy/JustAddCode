@@ -585,4 +585,48 @@ begin
   TgoTextToSpeechImplementation(lParam).HandleVoiceEvent;
 end;
 
+//-----------------------------------------------------------
+
+// from https://stackoverflow.com/questions/19369809/delphi-get-country-codes-by-localeid/37981772#37981772
+function LCIDToLocaleName(Locale: LCID; lpName: LPWSTR; cchName: Integer;
+  dwFlags: DWORD): Integer; stdcall;external kernel32 name 'LCIDToLocaleName';
+
+
+function LocaleIDString():string;
+var
+   strNameBuffer : array [0..255] of WideChar; // 84 was len from original process online
+   //localID : TLocaleID;
+   // localID was 0, so didn't initialize, but still returned proper code page.
+   // using 0 in lieu of localID : nets the same result, var not required.
+   i : integer;
+begin
+  Result := '';
+
+  // LOCALE_USER_DEFAULT  vs. LOCALE_SYSTEM_DEFAULT
+  // since XP LOCALE_USER_DEFAULT is considered good practice for compatibility
+  if (LCIDToLocaleName(LOCALE_USER_DEFAULT, strNameBuffer, 255, 0) > 0) then
+    for i := 0 to 255 do
+     begin
+      if strNameBuffer[i] = #0 then  break
+      else Result := Result + strNameBuffer[i];
+    end;
+
+  if (Length(Result) = 0) and (LCIDToLocaleName(0, strNameBuffer, 255, 0) > 0) then
+   for i := 0 to 255 do
+     begin
+      if strNameBuffer[i] = #0 then break
+      else Result := Result + strNameBuffer[i];
+    end;
+
+  if Length(Result) = 0 then
+    Result := 'NR-NR' // defaulting to [No Reply - No Reply]
+end;
+
+procedure getNativeVoiceLanguage;
+begin
+  NativeSpeechLanguage := LocaleIDString; // 'pt-BR'
+end;
+
+initialization
+   getNativeVoiceLanguage;     // get OS language settings
 end.

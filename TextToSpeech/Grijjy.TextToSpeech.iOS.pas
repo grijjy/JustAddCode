@@ -134,11 +134,10 @@ type
     FDelegate: TDelegate;
 
     fNativeVoice:AVSpeechSynthesisVoice;  //Om:
-
     fMaleVoice, fFemaleVoice: AVSpeechSynthesisVoice;
 
   protected
-    Procedure getNativeVoice(const aVoiceLang:String);  // aVoiceLang in format 'pt-BR'
+    Procedure getNativeVoices;
     { IgoTextToSpeech }
     function getVoices(aList:TStrings):boolean; override;   // Om: mar20: get list of available voices ( only for iOS at this time)
     function getVoiceGender:TVoiceGender;       override;   // Om: mar20:
@@ -154,8 +153,8 @@ type
     destructor Destroy; override;
   end;
 
-function getDeviceCountryCode:String;  //platform specific get country code
-function getOSLanguage:String;
+//function getDeviceCountryCode:String;  //platform specific get country code
+//function getOSLanguage:String;
 
 
 implementation //---------------------------------------------------
@@ -249,27 +248,27 @@ begin
       end;
 end;
 
-function getDeviceCountryCode:String;
+function getDeviceCountryCode:String;    // 'BR' 'US' ..  not used
 const FoundationFwk: string = '/System/Library/Frameworks/Foundation.framework/Foundation';
 var
   CurrentLocale: NSLocale;
   CountryISO: NSString;
 begin
-  Result:='Unknown';
+  Result:='??';
 
   CurrentLocale := TNSLocale.Wrap(TNSLocale.OCClass.currentLocale);
-  CountryISO := TNSString.Wrap(CurrentLocale.objectForKey((CocoaNSStringConst(FoundationFwk, 'NSLocaleCountryCode') as ILocalObject).GetObjectID));
-  Result := UTF8ToString(CountryISO.UTF8String);
+  CountryISO    := TNSString.Wrap(CurrentLocale.objectForKey((CocoaNSStringConst(FoundationFwk, 'NSLocaleCountryCode') as ILocalObject).GetObjectID));
+  Result := UTF8ToString( CountryISO.UTF8String );
 
   if (Length(Result)>2) then Delete(Result, 3, MaxInt);   //trim tail
 end;
 
-function getOSLanguage:String;
+function getOSLanguage:String;         //default language 'es-ES' 'en-US' 'pt-BR' ..
 var
   Languages: NSArray;
 begin
   Languages := TNSLocale.OCClass.preferredLanguages;
-  Result := TNSString.Wrap(Languages.objectAtIndex(0)).UTF8String;
+  Result    := TNSString.Wrap(Languages.objectAtIndex(0)).UTF8String;
 end;
 
 { TgoTextToSpeechImplementation }
@@ -287,7 +286,7 @@ begin
   fMaleVoice   := nil;
   fFemaleVoice := nil;
 
-  getNativeVoice('pt-BR');   //on iOS, choose 'Luciana's'  pt-BR
+  getNativeVoices;
 end;
 
 destructor TgoTextToSpeechImplementation.Destroy;
@@ -298,9 +297,10 @@ begin
 end;
 
 // Om: mar20:
-Procedure TgoTextToSpeechImplementation.getNativeVoice(const aVoiceLang:String);  // aMaleVoiceLang,aFemaleVoiceLang in format 'pt'
+Procedure TgoTextToSpeechImplementation.getNativeVoices;  // aMaleVoiceLang,aFemaleVoiceLang in format 'pt'
 begin
-  self.setVoice(aVoiceLang, aVoiceLang);  //both voices same lang
+  if (NativeSpeechLanguage<>'??-??') then
+     setVoice(NativeSpeechLanguage, NativeSpeechLanguage);  //both voices same lang
 end;
 
 // var
@@ -500,4 +500,11 @@ begin
     FTextToSpeech.DoSpeechStarted;
 end;
 
+procedure getNativeVoiceLanguage;
+begin
+  NativeSpeechLanguage := getOSLanguage; // 'pt-BR'
+end;
+
+initialization
+  getNativeVoiceLanguage;     // get OS language settings
 end.
