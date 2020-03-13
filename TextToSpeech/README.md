@@ -7,13 +7,15 @@ If you are only interested in the end result, then you can stick to the first pa
 # In this fork: by oMAR mar/20
 * Added getVoices ( a list of voices available to Text-to-speech - returns voice descriptions on a TStrings )
 status: Ok for iOS, Android and Windows 
+* Loads default voices for the Locale. If available, capture 1 male and 1 female voices for the default OS language
 * Capture one male and one female voices to allow 2 person dialog ( TV journal style )
 * Set voices alternating, one line at a time ( one line for the guy one for the girl )
    ok for iOS and Android.   Not working for Windows.
    Windows SAPI COM code needs fixing, to do voice selection
    Hard coded voice selection ( pt-BR )    <-- fix that
 - for iOS there are one male and one female voices available in portuguese-BR
-- for Android, there is a brasilian male voice and a spanish-mexican female that kinda make a funny couple :) 
+- for Android, there is a brazilian male voice and a spanish-mexican female that kinda make a funny couple :) 
+  on Android, you can download extra voices ( Android Settings )
 
 The example was expanded to:
 
