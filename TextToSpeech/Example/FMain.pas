@@ -131,6 +131,8 @@ begin
   FTextToSpeech.OnSpeechFinished := TextToSpeechFinished;
 
   fSpeechQueue := TStringList.Create;    // local speech queue
+
+  MemoLog.Lines.Add( 'default language= '+NativeSpeechLanguage );  // show OS languege settings
 end;
 
 procedure TFormMain.FormDestroy(Sender: TObject);

@@ -120,7 +120,7 @@ object FormMain: TFormMain
       end>
     RowCollection = <
       item
-        Value = 32.809194744060550000
+        Value = 32.809194744060560000
       end
       item
         Value = 36.733478003726720000
@@ -209,6 +209,7 @@ object FormMain: TFormMain
       Text = 'es-MX'
       Position.X = 104.403503417968800000
       Position.Y = 46.411117553710940000
+      Hint = 'female voice language ( format  '#39'pt-BR'#39' )]'
       Size.Width = 66.000000000000000000
       Size.Height = 30.000000000000000000
       Size.PlatformDefault = False
@@ -221,6 +222,7 @@ object FormMain: TFormMain
       Text = 'pt-BR'
       Position.X = 193.286560058593800000
       Position.Y = 46.411117553710940000
+      Hint = 'male voice language'
       Size.Width = 57.000000000000000000
       Size.Height = 30.000000000000000000
       Size.PlatformDefault = False
