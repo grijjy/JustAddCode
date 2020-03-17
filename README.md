@@ -12,3 +12,10 @@ Here you will find sample code and other tidbits from Grijjy's [Just Add Code](h
 * [Face Detection on Android and iOS](FaceDetection), as discussed in this [blog post](https://blog.grijjy.com/2017/09/11/face-detection-on-android-and-ios/).
 * [Allocation-Free Collections](AllocationFreeCollections), as discussed in this [blog post](https://blog.grijjy.com/2019/01/25/allocation-free-collections/).
 
+# in this fork, by oMAR - mar20
+  Added code to JustAddCode/Text-To-Speech
+- selection of native language 
+- list available voices
+- 2 person dialog talker ( male and female - TV journal style )
+- set male and female voice languages
+
