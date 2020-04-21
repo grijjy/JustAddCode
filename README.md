@@ -12,4 +12,5 @@ Here you will find sample code and other tidbits from Grijjy's [Just Add Code](h
 * [Face Detection on Android and iOS](FaceDetection), as discussed in this [blog post](https://blog.grijjy.com/2017/09/11/face-detection-on-android-and-ios/).
   See also [this fork](https://github.com/omarreis/JustAddCode/tree/master/TextToSpeech) with support for customizing voices.
 * [Allocation-Free Collections](AllocationFreeCollections), as discussed in this [blog post](https://blog.grijjy.com/2019/01/25/allocation-free-collections/).
+* [Mapping Delphi Types to Indices at Compile Time](TypeIndices), as discussed in this [blog post](https://blog.grijjy.com/2020/04/21/mapping-delphi-types-to-indices-at-compile-time/).
 
