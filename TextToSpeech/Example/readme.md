@@ -1,5 +1,7 @@
 # Sample app for JustAddCode/TextToSpeech
 
+changed in this fork by oMAR apr20
+
 - added - show list of voices.
     on iOS there are 59 voices. For some languages there are male and female voices. Others have only one of them.
     on Android you may have to download voices on text-to-speech settings.
