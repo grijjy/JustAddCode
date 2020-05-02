@@ -12,10 +12,12 @@ Here you will find sample code and other tidbits from Grijjy's [Just Add Code](h
 * [Face Detection on Android and iOS](FaceDetection), as discussed in this [blog post](https://blog.grijjy.com/2017/09/11/face-detection-on-android-and-ios/).
 * [Allocation-Free Collections](AllocationFreeCollections), as discussed in this [blog post](https://blog.grijjy.com/2019/01/25/allocation-free-collections/).
 
-# in this fork, by oMAR - mar20
-  Added code to JustAddCode/TextToSpeech
-- selection of native language ( use phone OS settings )
-- show list of available voices 
-- 2 person dialog talker ( male and female - TV journal style )
-- set male and female voice languages ( see Example proj ) 
+# changed/expanded in this fork by oMAR - mar20
+  Added features to *TextToSpeech* -  JustAddCode/TextToSpeech
+  - selection of native language ( use phone OS settings )
+  - show list of available voices 
+  - 2 person dialog talker ( male and female - TV journal style )
+  - set male and female voice languages ( see Example proj ) 
+
+tested w/ D10.3.3 
 
