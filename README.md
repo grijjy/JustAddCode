@@ -18,6 +18,8 @@ Here you will find sample code and other tidbits from Grijjy's [Just Add Code](h
   - show list of available voices 
   - 2 person dialog talker ( male and female - TV journal style )
   - set male and female voice languages ( see Example proj ) 
+  
+Example app was updated to include the new features 
 
 tested w/ D10.3.3 
 
