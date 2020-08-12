@@ -1,0 +1,72 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{EFB474A6-AA8F-46C3-BE5D-01680BD69556}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="01.Interfaces\SmartPointers01.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="02.BaseClass\SmartPointers02.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="03.AnyObject\SmartPointers03.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="04.MonitorHack\SmartPointers04.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="SmartPointers01">
+        <MSBuild Projects="01.Interfaces\SmartPointers01.dproj"/>
+    </Target>
+    <Target Name="SmartPointers01:Clean">
+        <MSBuild Projects="01.Interfaces\SmartPointers01.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="SmartPointers01:Make">
+        <MSBuild Projects="01.Interfaces\SmartPointers01.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="SmartPointers02">
+        <MSBuild Projects="02.BaseClass\SmartPointers02.dproj"/>
+    </Target>
+    <Target Name="SmartPointers02:Clean">
+        <MSBuild Projects="02.BaseClass\SmartPointers02.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="SmartPointers02:Make">
+        <MSBuild Projects="02.BaseClass\SmartPointers02.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="SmartPointers03">
+        <MSBuild Projects="03.AnyObject\SmartPointers03.dproj"/>
+    </Target>
+    <Target Name="SmartPointers03:Clean">
+        <MSBuild Projects="03.AnyObject\SmartPointers03.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="SmartPointers03:Make">
+        <MSBuild Projects="03.AnyObject\SmartPointers03.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="SmartPointers04">
+        <MSBuild Projects="04.MonitorHack\SmartPointers04.dproj"/>
+    </Target>
+    <Target Name="SmartPointers04:Clean">
+        <MSBuild Projects="04.MonitorHack\SmartPointers04.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="SmartPointers04:Make">
+        <MSBuild Projects="04.MonitorHack\SmartPointers04.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="SmartPointers01;SmartPointers02;SmartPointers03;SmartPointers04"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="SmartPointers01:Clean;SmartPointers02:Clean;SmartPointers03:Clean;SmartPointers04:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="SmartPointers01:Make;SmartPointers02:Make;SmartPointers03:Make;SmartPointers04:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>

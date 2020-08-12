@@ -1,0 +1,57 @@
+object FormMain: TFormMain
+  Left = 0
+  Top = 0
+  ActiveControl = ButtonTest
+  Caption = 'Smart Pointers 04 - Monitor Hack'
+  ClientHeight = 342
+  ClientWidth = 479
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnCreate = FormCreate
+  DesignerMasterStyle = 0
+  object LayoutTop: TLayout
+    Align = Top
+    Size.Width = 479.000000000000000000
+    Size.Height = 49.000000000000000000
+    Size.PlatformDefault = False
+    object ButtonTest: TButton
+      Align = Left
+      Default = True
+      Margins.Left = 8.000000000000000000
+      Margins.Top = 8.000000000000000000
+      Margins.Bottom = 8.000000000000000000
+      Position.X = 8.000000000000000000
+      Position.Y = 8.000000000000000000
+      Size.Width = 192.000000000000000000
+      Size.Height = 33.000000000000000000
+      Size.PlatformDefault = False
+      Text = 'Test Smart Pointer'
+      OnClick = ButtonTestClick
+    end
+    object ButtonTestCycle: TButton
+      Align = Left
+      Margins.Left = 8.000000000000000000
+      Margins.Top = 8.000000000000000000
+      Margins.Bottom = 8.000000000000000000
+      Position.X = 208.000000000000000000
+      Position.Y = 8.000000000000000000
+      Size.Width = 192.000000000000000000
+      Size.Height = 33.000000000000000000
+      Size.PlatformDefault = False
+      Text = 'Test Reference Cycle'
+      OnClick = ButtonTestCycleClick
+    end
+  end
+  object MemoLog: TMemo
+    Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+    DataDetectorTypes = []
+    ReadOnly = True
+    Align = Client
+    Size.Width = 479.000000000000000000
+    Size.Height = 293.000000000000000000
+    Size.PlatformDefault = False
+    Viewport.Width = 475.000000000000000000
+    Viewport.Height = 289.000000000000000000
+  end
+end
