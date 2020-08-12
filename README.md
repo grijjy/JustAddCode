@@ -14,4 +14,6 @@ Here you will find sample code and other tidbits from Grijjy's [Just Add Code](h
 * [Allocation-Free Collections](AllocationFreeCollections), as discussed in this [blog post](https://blog.grijjy.com/2019/01/25/allocation-free-collections/).
 * [Mapping Delphi Types to Indices at Compile Time](TypeIndices), as discussed in this [blog post](https://blog.grijjy.com/2020/04/21/mapping-delphi-types-to-indices-at-compile-time/).
 * [Boost Mac performance with Metal and Delphi 10.4](FireMonkeyPerformance), as discussed in this [blog post](https://blog.grijjy.com/2020/05/25/boost-mac-performance-with-metal-and-delphi-10-4/).
+* [Automate Restorable Operations with Custom Managed Records](CustomManagedRecords/RestorableOperations), as discussed in this [blog post](https://blog.grijjy.com/2020/08/03/automate-restorable-operations-with-custom-managed-records/).
+* [Custom Managed Records for Smart Pointers](CustomManagedRecords/SmartPointers), as discussed in this [blog post](https://blog.grijjy.com/2020/08/12/custom-managed-records-for-smart-pointers/).
 
