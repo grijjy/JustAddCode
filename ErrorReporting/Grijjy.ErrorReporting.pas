@@ -693,7 +693,7 @@ var
 function cxa_demangle(const mangled_name: MarshaledAString;
   output_buffer: MarshaledAString; length: NativeInt;
   out status: Integer): MarshaledAString; cdecl;
-  external 'libgnustl_static.a' name '__cxa_demangle';
+  external {$IF (RTLVersion < 34)}'libgnustl_static.a'{$ELSE}'libc++abi.a'{$ENDIF} name '__cxa_demangle';
 
 type
   { For each entry in the call stack, we save 7 values for inspection later.
