@@ -1,0 +1,19 @@
+Texture2D Texture;
+SamplerState Sampler;
+
+float4 main(float4 position: SV_POSITION, float2 texCoord: TEXCOORD0): SV_Target0
+{
+  // texCoord ranges from 0.0 to 1.0
+  // For calculating a unit circle, remap to -1.0 to 1.0
+  float2 locationFromCenter = (2.0 * texCoord) - float2(1.0, 1.0);
+  
+  // Calculate distance from center
+  float distanceFromCenter = length(locationFromCenter);
+  
+  // A distance greater than 1 means we are outside the circle.
+  // Return a transparent color in that case
+  if (distanceFromCenter > 1.0)
+    return float4(0.0, 0.0, 0.0, 0.0);
+    
+  return Texture.Sample(Sampler, texCoord);
+}

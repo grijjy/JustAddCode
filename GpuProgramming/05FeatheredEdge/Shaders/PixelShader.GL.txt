@@ -1,0 +1,37 @@
+uniform sampler2D _Texture;
+uniform float _Feather;
+
+varying vec2 TexCoord;
+
+void main()
+{
+  // TexCoord ranges from 0.0 to 1.0
+  // For calculating a unit circle, remap to -1.0 to 1.0
+  vec2 locationFromCenter = (2.0 * TexCoord) - vec2(1.0, 1.0);
+  
+  // Calculate distance from center, but subtract it from 1.0 so 0.0 is at
+  // the edge, and 1.0 is at the center. This makes subsequent calculations
+  // easier.
+  float distance = 1.0 - length(locationFromCenter);
+  
+  // A distance less than 0 means we are outside the circle.
+  // Return a transparent color in that case
+  if (distance < 0.0)
+  {
+    gl_FragColor = vec4(0.0, 0.0, 0.0, 0.0);
+    return;
+  }
+    
+  // Get pixel color from texture
+  vec4 color = texture2D(_Texture, TexCoord);
+  
+  // If the distance is between 0.0 and Feather, then smoothly interpolate
+  // the Alpha value so the edge fades out to fully transparent
+  if (distance < _Feather)
+  {
+    float alpha = smoothstep(0.0, _Feather, distance);
+    color = color * alpha;
+  }
+  
+  gl_FragColor = color;
+}

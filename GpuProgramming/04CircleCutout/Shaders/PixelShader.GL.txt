@@ -1,0 +1,23 @@
+uniform sampler2D _Texture;
+
+varying vec2 TexCoord;
+
+void main()
+{
+  // TexCoord ranges from 0.0 to 1.0
+  // For calculating a unit circle, remap to -1.0 to 1.0
+  vec2 locationFromCenter = (2.0 * TexCoord) - vec2(1.0, 1.0);
+  
+  // Calculate distance from center
+  float distanceFromCenter = length(locationFromCenter);
+  
+  // A distance greater than 1 means we are outside the circle.
+  // Return a transparent color in that case
+  if (distanceFromCenter > 1.0)
+  {
+    gl_FragColor = vec4(0.0, 0.0, 0.0, 0.0);
+    return;
+  }
+    
+  gl_FragColor = texture2D(_Texture, TexCoord);
+}

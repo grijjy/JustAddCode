@@ -1,0 +1,41 @@
+using namespace metal;
+
+struct ProjectedVertex
+{
+  float4 position [[position]];
+  float2 texCoord;
+};
+
+fragment float4 fragmentShader(
+  const ProjectedVertex in [[stage_in]],
+  constant float &Feather [[buffer(0)]],
+  const texture2d<float> Image [[texture(0)]],
+  const sampler ImageSampler [[sampler(0)]])
+{
+  // texCoord ranges from 0.0 to 1.0
+  // For calculating a unit circle, remap to -1.0 to 1.0
+  float2 locationFromCenter = (2.0 * in.texCoord) - float2(1.0, 1.0);
+  
+  // Calculate distance from center, but subtract it from 1.0 so 0.0 is at
+  // the edge, and 1.0 is at the center. This makes subsequent calculations
+  // easier.
+  float distance = 1.0 - length(locationFromCenter);
+  
+  // A distance less than 0 means we are outside the circle.
+  // Return a transparent color in that case
+  if (distance < 0.0)
+    return float4(0.0, 0.0, 0.0, 0.0);
+    
+  // Get pixel color from texture
+  float4 color = Image.sample(ImageSampler, in.texCoord);
+  
+  // If the distance is between 0.0 and Feather, then smoothly interpolate
+  // the Alpha value so the edge fades out to fully transparent
+  if (distance < Feather)
+  {
+    float alpha = smoothstep(0.0, Feather, distance);
+    color = color * alpha;
+  }
+  
+  return color;
+}

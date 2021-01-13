@@ -1,0 +1,96 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{13D23CFA-2D13-4C41-9D35-20099DEDFE1B}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="01GettingStarted\Gpu01GettingStarted.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="02CustomColor\Gpu02CustomColor.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="03Texture\Gpu03Texture.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="04CircleCutout\Gpu04CircleCutout.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="05FeatheredEdge\Gpu05FeatheredEdge.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="06Plasma\Gpu06Plasma.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="Gpu01GettingStarted">
+        <MSBuild Projects="01GettingStarted\Gpu01GettingStarted.dproj"/>
+    </Target>
+    <Target Name="Gpu01GettingStarted:Clean">
+        <MSBuild Projects="01GettingStarted\Gpu01GettingStarted.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="Gpu01GettingStarted:Make">
+        <MSBuild Projects="01GettingStarted\Gpu01GettingStarted.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Gpu02CustomColor">
+        <MSBuild Projects="02CustomColor\Gpu02CustomColor.dproj"/>
+    </Target>
+    <Target Name="Gpu02CustomColor:Clean">
+        <MSBuild Projects="02CustomColor\Gpu02CustomColor.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="Gpu02CustomColor:Make">
+        <MSBuild Projects="02CustomColor\Gpu02CustomColor.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Gpu03Texture">
+        <MSBuild Projects="03Texture\Gpu03Texture.dproj"/>
+    </Target>
+    <Target Name="Gpu03Texture:Clean">
+        <MSBuild Projects="03Texture\Gpu03Texture.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="Gpu03Texture:Make">
+        <MSBuild Projects="03Texture\Gpu03Texture.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Gpu04CircleCutout">
+        <MSBuild Projects="04CircleCutout\Gpu04CircleCutout.dproj"/>
+    </Target>
+    <Target Name="Gpu04CircleCutout:Clean">
+        <MSBuild Projects="04CircleCutout\Gpu04CircleCutout.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="Gpu04CircleCutout:Make">
+        <MSBuild Projects="04CircleCutout\Gpu04CircleCutout.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Gpu05FeatheredEdge">
+        <MSBuild Projects="05FeatheredEdge\Gpu05FeatheredEdge.dproj"/>
+    </Target>
+    <Target Name="Gpu05FeatheredEdge:Clean">
+        <MSBuild Projects="05FeatheredEdge\Gpu05FeatheredEdge.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="Gpu05FeatheredEdge:Make">
+        <MSBuild Projects="05FeatheredEdge\Gpu05FeatheredEdge.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Gpu06Plasma">
+        <MSBuild Projects="06Plasma\Gpu06Plasma.dproj"/>
+    </Target>
+    <Target Name="Gpu06Plasma:Clean">
+        <MSBuild Projects="06Plasma\Gpu06Plasma.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="Gpu06Plasma:Make">
+        <MSBuild Projects="06Plasma\Gpu06Plasma.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="Gpu01GettingStarted;Gpu02CustomColor;Gpu03Texture;Gpu04CircleCutout;Gpu05FeatheredEdge;Gpu06Plasma"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="Gpu01GettingStarted:Clean;Gpu02CustomColor:Clean;Gpu03Texture:Clean;Gpu04CircleCutout:Clean;Gpu05FeatheredEdge:Clean;Gpu06Plasma:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="Gpu01GettingStarted:Make;Gpu02CustomColor:Make;Gpu03Texture:Make;Gpu04CircleCutout:Make;Gpu05FeatheredEdge:Make;Gpu06Plasma:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>
