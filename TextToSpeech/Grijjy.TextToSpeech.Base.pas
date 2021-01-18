@@ -27,6 +27,10 @@ type
     function _GetOnSpeechStarted: TNotifyEvent;
     procedure _SetOnSpeechStarted(const AValue: TNotifyEvent);
 
+    function getVoices(aList:TStrings):boolean; virtual; abstract;   // Om: mar20: get list of available voices ( only for iOS at this time)
+    function getVoiceGender:TVoiceGender;       virtual; abstract;   // Om: mar20:
+    function setVoice(const aMaleVoiceLang,aFemaleVoiceLang:String):boolean; virtual; abstract;  // Om: mar20: set voice w/ spec like 'pt'  (lang-country)
+
     function Speak(const AText: String): Boolean; virtual; abstract;
     procedure Stop; virtual; abstract;
     function IsSpeaking: Boolean; virtual; abstract;

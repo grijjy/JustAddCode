@@ -18,3 +18,14 @@ Here you will find sample code and other tidbits from Grijjy's [Just Add Code](h
 * [Custom Managed Records for Smart Pointers](CustomManagedRecords/SmartPointers), as discussed in this [blog post](https://blog.grijjy.com/2020/08/12/custom-managed-records-for-smart-pointers/).
 * [Introduction to Shader Programming](GpuProgramming), as discussed in this [blog post](https://blog.grijjy.com/2021/01/14/shader-programming/).
 
+# changed/expanded in this fork by oMAR - mar20
+  Added features to *TextToSpeech* -  JustAddCode/TextToSpeech
+  - selection of native language ( use phone OS settings )
+  - show list of available voices 
+  - 2 person dialog talker ( male and female - TV journal style )
+  - set male and female voice languages ( see Example proj ) 
+  
+Example app was updated to include the new features 
+
+tested w/ D10.3.3 
+

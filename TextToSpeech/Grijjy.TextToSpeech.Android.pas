@@ -1,16 +1,24 @@
 unit Grijjy.TextToSpeech.Android;
 {< Text To Speech engine implementation for Android }
 
+// Om: prefix = changes by oMAR mar20
+
 interface
 
 uses
+  System.Classes,  //Om: for TStrings
+  FMX.Platform,    //Om: plat services
+
   Androidapi.JNIBridge,
   Androidapi.JNI.JavaTypes,
+
+
   {$IF RTLVersion >= 31}
   Androidapi.JNI.Speech,
   {$ELSE}
   Androidapi.JNI.GraphicsContentViewText,
   {$ENDIF}
+  Grijjy.TextToSpeech,
   Grijjy.TextToSpeech.Base;
 
 {$IF RTLVersion < 31}
@@ -216,23 +224,63 @@ type
     FCompletedListener: TCompletedListener;
     FParams: JHashMap;
     FSpeechStarted: Boolean;
+
+    // objects below are set if found
+
+    fNativeVoice :JVoice;        // current language (used in last line)
+    fMaleVoice   :JVoice;        // male and female voices
+    fFemaleVoice :JVoice;
+
   private
     procedure Initialize(const AStatus: Integer);
+    procedure getNativeVoices;
   protected
     { IgoTextToSpeech }
-    function Speak(const AText: String): Boolean; override;
+    function getVoices(aList:TStrings):boolean;          override;   // Om: mar20: get list of available voices ( only for iOS at this time)
+    function getVoiceGender:TVoiceGender;                override;  // Om: mar20:
+    function setVoice(const aMaleVoiceLang,aFemaleVoiceLang:String):boolean;  override; // Om: mar20: set voice w/ spec like 'pt-br'  (lang-country)
+
+    function  Speak(const AText: String): Boolean; override;
     procedure Stop; override;
-    function IsSpeaking: Boolean; override;
+    function  IsSpeaking: Boolean; override;
   {$ENDREGION 'Internal Declarations'}
   public
     constructor Create;
   end;
 
-implementation
+// function getDeviceCountryCode:String;  //platform specific get country code
+
+
+implementation  //-----------------------------------
 
 uses
   System.SysUtils,
   Androidapi.Helpers;
+
+function getDeviceCountryCode:String;  //platform specific get country code
+var Locale: JLocale;
+begin
+  Result:='??';
+
+  Locale := TJLocale.JavaClass.getDefault;
+  Result := JStringToString( Locale.getCountry );
+
+  if Length(Result) > 2 then Delete(Result, 3, MaxInt);
+end;
+
+function getOSLanguage:String;
+var LocServ: IFMXLocaleService;
+begin
+  if TPlatformServices.Current.SupportsPlatformService(IFMXLocaleService, IInterface(LocServ)) then
+    Result := LocServ.GetCurrentLangID        // 2 letter code, but a different one ????   instead of 'pt' it gives 'po'
+    else Result := '??';
+
+    // if set Japanese on Android, LocaleService returns "jp", but other platform returns "ja"
+    // so I think it is better to change "jp" to "ja"
+    if      (Result = 'jp') then Result := 'ja'
+    else if (Result = 'po') then Result := 'pt';
+
+end;
 
 { TgoTextToSpeechImplementation }
 
@@ -241,6 +289,97 @@ begin
   inherited;
   FInitListener := TInitListener.Create(Self);
   FTextToSpeech := TJTextToSpeech.JavaClass.init(TAndroidHelper.Context, FInitListener);
+
+  fNativeVoice := nil;       //not set yet
+  fMaleVoice   := nil;
+  fFemaleVoice := nil;
+end;
+
+// Om: mar20:
+function TgoTextToSpeechImplementation.getVoices(aList: TStrings): boolean;
+var aVoicesLst:JSet;
+  it:Jiterator;
+  v :JVoice;
+  s :String;
+  n :integer;
+
+  vname,vlang,vcountry:String;
+
+begin
+  Result := false;
+  aVoicesLst := FTextToSpeech.getVoices;
+  it := aVoicesLst.iterator;
+  n  :=0;
+  while it.hasNext do
+  begin
+    inc(n);
+    v := TJVoice.Wrap( it.next );
+
+    vname    := jstringtostring( v.getName                );  //
+    vlang    := jstringtostring( v.getLocale.getLanguage  );  // por
+    vcountry := jstringtostring( v.getLocale.getCountry   );  // BRA
+
+    s := IntToStr(n)  +' '+   // str descr of voice
+         vname        +' '+   // tipo pt-BR-SMTm00
+         vlang        +' '+   // por
+         vcountry;            // BRA
+
+    aList.Add( s );
+
+    s := jstringtostring( v.toString );  // Voice[Name: en-US-SMTf00, locale:...
+    aList.Add( s );
+
+    Result := true;
+  end;
+end;
+
+function TgoTextToSpeechImplementation.getVoiceGender:TVoiceGender;    // Om: mar20:
+begin
+  if    (fNativeVoice=fFemaleVoice) then Result := vgFemale
+  else if (fNativeVoice=fMaleVoice) then Result := vgMale
+  else Result := vgUnkown;
+end;
+
+function TgoTextToSpeechImplementation.setVoice(const aMaleVoiceLang,aFemaleVoiceLang:String):boolean;  // Om: mar20: set voice w/ spec like 'pt-BR'
+var aVoicesLst:JSet;
+    it:Jiterator;
+    v :JVoice;
+    vname,vlang,vcountry,aLangCode,Lang2:String;
+    Sex:Char;
+
+begin
+  fNativeVoice := nil;
+  fMaleVoice   := nil;
+  fFemaleVoice := nil;
+
+  aVoicesLst := FTextToSpeech.getVoices;
+  it := aVoicesLst.iterator;
+
+  while it.hasNext do
+  begin
+    v := TJVoice.Wrap( it.next );                 //  123456789.123
+    vname     := jstringtostring( v.getName );    // 'es-MX-SMTf00'
+    aLangCode := Copy(vname,1,5);                 // 'es-MX'
+    Lang2     := Copy(vname,7,6);                 // 'SMTf00'
+    if (Pos('f',Lang2)>0) then Sex:='f' else Sex:='m';  //extract gender from Lang2
+
+    vlang    := jstringtostring( v.getLocale.getLanguage  );  // por
+    vcountry := jstringtostring( v.getLocale.getCountry   );  // BRA
+
+    if (CompareText(aLangCode,aFemaleVoiceLang)=0) and (Sex='f') then  //found language
+      fFemaleVoice := v;
+    if (CompareText(aLangCode,aMaleVoiceLang)=0) and (Sex='m') then  //found language
+      fMaleVoice := v;
+
+    /// if ( CompareText(vlang,'por')=0 ) and ( CompareText(vcountry,'BRA')=0 ) then
+    //    fMaleVoice := v;    // CHECK: Can we save the inteface for latter use ?
+    //  // Android não tem brazuka mulher. Usa a mexicana..
+    //  if ( CompareText(vlang,'spa')=0 ) and ( CompareText(vcountry,'MEX')=0 ) then
+    //    fFemaleVoice := v;
+  end;
+
+  if Assigned(fMaleVoice)    then  fNativeVoice := fMaleVoice;     //any voice will do, but..
+  if Assigned(fFemaleVoice)  then  fNativeVoice := fFemaleVoice;   //.. default = female
 end;
 
 procedure TgoTextToSpeechImplementation.Initialize(const AStatus: Integer);
@@ -259,9 +398,54 @@ begin
     FParams.put(TJTextToSpeech_Engine.JavaClass.KEY_PARAM_UTTERANCE_ID, StringToJString('DummyUtteranceId'));
     FCompletedListener := TCompletedListener.Create(Self);
     FTextToSpeech.setOnUtteranceCompletedListener(FCompletedListener);
+
+    getNativeVoices;  //try to locate two suitable voices ( one male one female )
   end
-  else
-    FTextToSpeech := nil;
+  else FTextToSpeech := nil;
+end;
+
+procedure TgoTextToSpeechImplementation.getNativeVoices;  //Om:
+var aVoicesLst:JSet;
+    it:Jiterator;
+    v :JVoice;
+    vname,vlang,vcountry,aLangCode,Lang2:String;
+    Sex:Char;
+begin
+  fNativeVoice := nil;
+  fMaleVoice   := nil;
+  fFemaleVoice := nil;
+
+  aVoicesLst := FTextToSpeech.getVoices;
+  it := aVoicesLst.iterator;
+
+  while it.hasNext do
+  begin
+    v := TJVoice.Wrap( it.next );
+
+    vname    := jstringtostring( v.getName                );    // es-MEX-SMTf00
+    //vlang    := jstringtostring( v.getLocale.getLanguage  );  // por
+    //vcountry := jstringtostring( v.getLocale.getCountry   );  // BRA
+
+    aLangCode := Copy(vname,1,5);                 // 'es-MX'
+    Lang2     := Copy(vname,7,6);                 // 'SMTf00'
+
+    if (NativeSpeechLanguage<>'??-??') and ( CompareText(aLangCode,NativeSpeechLanguage)=0 ) then  // NativeSpeechLanguage in Grijjy.TextToSpeech.pas
+      begin
+        if (Pos('f',Lang2)>0) then Sex:='f' else Sex:='m';  //extract gender from Lang2
+        if      (Sex='m') then fMaleVoice   := v           //locate voices of guy and girl
+        else if (Sex='f') then fFemaleVoice := v;
+      end;
+
+    //  oMAR: some old ad hoc tests
+    //  if ( CompareText(vlang,'por')=0 ) and ( CompareText(vcountry,'BRA')=0 ) then
+    //    fMaleVoice := v;    // CHECK: Can we save the inteface for latter use ?
+    //  // não tem brazuka mulher. Usa a mexicana..
+    //  if ( CompareText(vlang,'spa')=0 ) and ( CompareText(vcountry,'MEX')=0 ) then
+    //    fFemaleVoice := v;
+  end;
+
+  if Assigned(fMaleVoice)    then  fNativeVoice := fMaleVoice;     //any voice will do, but..
+  if Assigned(fFemaleVoice)  then  fNativeVoice := fFemaleVoice;   //.. default = female
 end;
 
 function TgoTextToSpeechImplementation.IsSpeaking: Boolean;
@@ -276,10 +460,21 @@ begin
 
   if Assigned(FTextToSpeech) then
   begin
+
+    // Om: Use saved voice, if any
+    if Assigned(fFemaleVoice) and Assigned(fMaleVoice) then      //alternating male-female voices
+       begin
+         if (fNativeVoice=fFemaleVoice) then fNativeVoice:=fMaleVoice
+           else fNativeVoice:=fFemaleVoice;
+       end;
+
+    if Assigned(fNativeVoice) then
+      FTextToSpeech.setVoice( fNativeVoice );
+
     Result := (FTextToSpeech.speak(StringToJString(AText),
       TJTextToSpeech.JavaClass.QUEUE_FLUSH, FParams) = TJTextToSpeech.JavaClass.SUCCESS);
     if (Result) then
-    begin
+   begin
       FSpeechStarted := True;
       DoSpeechStarted;
     end;
@@ -296,8 +491,7 @@ end;
 
 { TgoTextToSpeechImplementation.TInitListener }
 
-constructor TgoTextToSpeechImplementation.TInitListener.Create(
-  const AImplementation: TgoTextToSpeechImplementation);
+constructor TgoTextToSpeechImplementation.TInitListener.Create(const AImplementation: TgoTextToSpeechImplementation);
 begin
   Assert(Assigned(AImplementation));
   inherited Create;
@@ -320,8 +514,7 @@ begin
   FImplementation := AImplementation;
 end;
 
-procedure TgoTextToSpeechImplementation.TCompletedListener.onUtteranceCompleted(
-  utteranceId: JString);
+procedure TgoTextToSpeechImplementation.TCompletedListener.onUtteranceCompleted( utteranceId: JString);
 begin
   if Assigned(FImplementation) then
   begin
@@ -330,4 +523,12 @@ begin
   end;
 end;
 
+
+procedure getNativeVoiceLanguage;
+begin
+  NativeSpeechLanguage := getOSLanguage+'-'+getDeviceCountryCode;   // 'pt-BR'
+end;
+
+initialization
+  getNativeVoiceLanguage;     // get OS language settings
 end.
