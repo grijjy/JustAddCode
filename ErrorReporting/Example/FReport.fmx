@@ -2,19 +2,19 @@ object FormReport: TFormReport
   Left = 0
   Top = 0
   ClientHeight = 480
-  ClientWidth = 320
+  ClientWidth = 800
   FormFactor.Width = 320
   FormFactor.Height = 480
   FormFactor.Devices = [Desktop]
   DesignerMasterStyle = 2
   object ToolBar: TToolBar
-    Size.Width = 320.000000000000000000
+    Size.Width = 800.000000000000000000
     Size.Height = 44.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 0
     object LabelReport: TLabel
       Align = Client
-      Size.Width = 320.000000000000000000
+      Size.Width = 800.000000000000000000
       Size.Height = 44.000000000000000000
       Size.PlatformDefault = False
       StyleLookup = 'toollabel'
@@ -39,11 +39,11 @@ object FormReport: TFormReport
     TextSettings.Font.Family = 'Courier'
     TextSettings.Font.Size = 11.000000000000000000
     Align = Client
-    Size.Width = 320.000000000000000000
+    Size.Width = 800.000000000000000000
     Size.Height = 436.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 6
-    Viewport.Width = 312.000000000000000000
+    Viewport.Width = 792.000000000000000000
     Viewport.Height = 428.000000000000000000
   end
 end

@@ -1,15 +1,99 @@
 unit Grijjy.ErrorReporting;
 
-{ Some building blocks for creating an exception logger for iOS or Android.
-  It traps unhandled exceptions and logs them with a stack trace (aka call
-  stack).
+{ Some building blocks for creating an exception logger for iOS, Android or
+  macOS. It traps unhandled exceptions and logs them with a stack trace (aka
+  call stack).
 
-  It can also trap exceptions on Windows and macOS, but it does not create a
-  call stack on those platforms. }
+  It can also trap exceptions on Windows, but it does not create a call stack on
+  this platform.
+
+  DEVELOPER GUIDE
+  ===============
+
+  For more information, see these blog articles:
+  * Build your own Error Reporter – Part 1: iOS
+    https://blog.grijjy.com/2017/02/09/build-your-own-error-reporter-part-1-ios/
+  * Build your own Error Reporter – Part 2: Android
+    https://blog.grijjy.com/2017/02/21/build-your-own-error-reporter-part-2-android/
+  * Build your own Error Reporter – Part 3: Intel macOS64
+
+  To enable exception reporting, you need to do the following:
+  * Let the exception logger capture unhandled FMX exceptions (place this where
+    it is executed early, like the constructor of the main form):
+      Application.OnException := TgoExceptionReporter.ExceptionHandler;
+  * Subscribe to the TgoExceptionReportMessage message to get notified of
+    exception reports:
+      TMessageManager.DefaultManager.SubscribeToMessage(
+        TgoExceptionReportMessage, HandleExceptionReport);
+  * In this message handler, you can handle the report in any way you want.
+    For example:
+    * You can email it to your development team.
+    * You can send it to your cloud backend.
+    * You can show it to the user. However, note that the message may be sent
+      from another thread than the UI thread, so you need to synchronize any
+      UI calls with the main thread.
+    * You can send it to a service like HockeyApp.
+    * etc.
+    However, because the app may be unstable now (depending on the type of
+    exception) it may be safest to just write the report to disk and terminate
+    the app (by calling Halt). Then, the next time the app starts up, and can
+    check for this file and handle the report at that point.
+  * Enable embedding of debug information to receive useful callstacks, by
+    setting these project options (menu option "Project | Options..."):
+    * Compiling | Debugging:
+      * Debug information: Limited debug information
+      * Local symbols: False
+      * Symbol reference info: None
+      * Use debug .dcus: True (in case you want symbol information for standard
+        RTL and FXM units)
+    * Linking | Debug information: True (checked)
+
+  NOTES FOR ANDROID
+  -----------------
+  For symbolication to work on Android, you need to set the following linker
+  option:
+  * Go to "Project | Options..."
+  * Select the target "All configurations - Android platform"
+  * Go to the page "Delphi Compiler | Linking"
+  * Set "Options passed to the LD linker" to:
+      --version-script=goExports.vsr
+
+  Make sure goExports.vsr is available in the search path, or set it using
+  an absolute or relative path, as in:
+      --version-script=..\goExports.vsr
+
+  If you only want symbolication for your Release (play store) build, then
+  select the target "Release configuration - Android platform" instead (or any
+  other configuration you want).
+
+  NOTES FOR MACOS
+  ---------------
+  To enable line number information:
+  * Add the following post-build event to a 64-bit macOS configuration:
+      LNG.exe "$(OUTPUTPATH)"
+    Make sure the LNG (Line Number Generator) is in the system path, or use an
+    absolute or relative path. The source code for this tool can be found
+    in the Tools directory.
+    Make sure the "Cancel on error" option is checked.
+  * Deploy the .gol file:
+    * In the Deployment Mananger, add the .gol file (usually found in the
+      OSX64\<config>\ directory).
+    * Set the Remote Path to "Contents\MacOS\"
+  * Make sure you do *NOT* deploy the dSYM file, since this is not needed.
+    Uncheck it in the Deployment Manager.
+
+  Note: the LNG tool uses the dSYM file to extract line number information. If
+  the tool fails for some reason (for example, because the dSYM is not
+  available), then an error is logged to the Output window in Delphi, and the
+  Delphi compilation will fail. The tool creates a .gol file in the same
+  directory as the executable. }
 
 interface
 
 uses
+  {$IF Defined(MACOS64) and not Defined(IOS)}
+  Grijjy.LineNumberInfo,
+  {$ENDIF}
   System.SysUtils,
   System.Messaging;
 
@@ -32,6 +116,9 @@ type
 
     { The (base) address of the module where CodeAddress is found. }
     ModuleAddress: UIntPtr;
+
+    { The line number (of CodeAddress), or 0 if not available. }
+    LineNumber: Integer;
 
     { The name of the routine at CodeAddress, if available. }
     RoutineName: String;
@@ -102,47 +189,16 @@ type
   end;
 
 type
-  { Main class for reporting exceptions. To enable exception reporting, you
-    need to do the following:
-    * Let the exception logger capture unhandled FMX exceptions by calling:
-        Application.OnException := TgoExceptionReporter.ExceptionHandler;
-    * Subscribe to the TgoExceptionReportMessage message to get notified of
-      exception reports:
-        TMessageManager.DefaultManager.SubscribeToMessage(
-          TgoExceptionReportMessage, HandleExceptionReport);
-    * In this message handler, you can handle the report in any way you want.
-      For example:
-      * You can email it to your development team.
-      * You can send it to your cloud backend.
-      * You can show it to the user. However, note that the message may be sent
-        from another thread than the UI thread, so you need to synchronize any
-        UI calls with the main thread.
-      * You can send it to a service like HockeyApp.
-      * etc.
-      However, because the app may be unstable now (depending on the type of
-      exception) it may be safest to just write the report to disk and terminate
-      the app (by calling Halt). Then, the next time the app starts up, and can
-      check for this file and handle the report at that point.
-
-    NOTE FOR ANDROID: For symbolication to work on Android, you need to set the
-    following linker option:
-    * Go to "Project | Options..."
-    * Select the target "All configurations - Android platform"
-    * Go to the page "Delphi Compiler | Linking"
-    * Set "Options passed to the LD linker" to:
-        --version-script=goExports.vsr
-
-    Make sure goExports.vsr is available in the search path, or set it using
-    an absolute or relative path, as in:
-        --version-script=..\goExports.vsr
-
-    If you only want symbolication for your Release (play store) build, then
-    select the target "Release configuration - Android platform" instead (or any
-    other configuration you want). }
+  { Main class for reporting exceptions.
+    See the documentation at the top of this unit for usage information. }
   TgoExceptionReporter = class
   {$REGION 'Internal Declarations'}
   private class var
     FInstance: TgoExceptionReporter;
+    {$IF Defined(MACOS64) and not Defined(IOS)}
+    FLineNumberInfo: TgoLineNumberInfo;
+    class function GetLineNumber(const AAddress: UIntPtr): Integer; static;
+    {$ENDIF}
     class function GetExceptionHandler: TgoExceptionEvent; static;
     class function GetMaxCallStackDepth: Integer; static;
     class procedure SetMaxCallStackDepth(const Value: Integer); static;
@@ -194,7 +250,7 @@ implementation
 
 uses
   System.Classes,
-  {$IF Defined(IOS) or Defined(ANDROID)}
+  {$IF Defined(MACOS) or Defined(ANDROID)}
   Posix.Dlfcn,
   Posix.Stdlib,
   {$ENDIF}
@@ -252,6 +308,11 @@ begin
       SB.Append(FExceptionLocation.RoutineName);
       SB.Append(' + ');
       SB.Append(FExceptionLocation.CodeAddress - FExceptionLocation.RoutineAddress);
+      if (FExceptionLocation.LineNumber > 0) then
+      begin
+        SB.Append(', line ');
+        SB.Append(FExceptionLocation.LineNumber)
+      end;
       SB.AppendLine(')');
     end
     else
@@ -272,6 +333,11 @@ begin
           SB.Append(Entry.RoutineName);
           SB.Append(' + ');
           SB.Append(Entry.CodeAddress - Entry.RoutineAddress);
+          if (Entry.LineNumber > 0) then
+          begin
+            SB.Append(', line ');
+            SB.Append(Entry.LineNumber)
+          end;
         end;
         SB.AppendLine;
       end;
@@ -329,6 +395,7 @@ begin
   CodeAddress := 0;
   RoutineAddress := 0;
   ModuleAddress := 0;
+  LineNumber := 0;
   RoutineName := '';
   ModuleName := '';
 end;
@@ -493,10 +560,10 @@ begin
     FInstance.FMaxCallStackDepth := Value;
 end;
 
-{$IF Defined(IOS)}
+{$IF Defined(MACOS)}
 
 (*****************************************************************************)
-(*** iOS specific ************************************************************)
+(*** iOS/macOS specific ******************************************************)
 (*****************************************************************************)
 
 const
@@ -558,6 +625,15 @@ begin
   end;
 end;
 
+{$IF Defined(MACOS64) and not Defined(IOS)}
+class function TgoExceptionReporter.GetLineNumber(const AAddress: UIntPtr): Integer;
+begin
+  if (FLineNumberInfo = nil) then
+    FLineNumberInfo := TgoLineNumberInfo.Create;
+  Result := FLineNumberInfo.Lookup(AAddress);
+end;
+{$ENDIF}
+
 {$ELSEIF Defined(ANDROID64)}
 
 (*****************************************************************************)
@@ -586,7 +662,6 @@ const
   _URC_HANDLER_FOUND = 6;
   _URC_INSTALL_CONTEXT = 7;
   _URC_CONTINUE_UNWIND = 8;
-
 type
   _Unwind_Trace_Fn = function(context: _PUnwind_Context; userdata: Pointer): _Unwind_Reason_code; cdecl;
 
@@ -661,7 +736,7 @@ end;
 {$ELSEIF Defined(ANDROID)}
 
 (*****************************************************************************)
-(*** Android specific ********************************************************)
+(*** Android32 specific ******************************************************)
 (*****************************************************************************)
 
 type
@@ -867,27 +942,27 @@ end;
 class function TgoExceptionReporter.GlobalGetExceptionStackInfo(
   P: PExceptionRecord): Pointer;
 begin
-  { Call stacks are only supported on iOS and Android }
+  { Call stacks are only supported on iOS, Android and macOS }
   Result := nil;
 end;
 
 class function TgoExceptionReporter.GetCallStack(
   const AStackInfo: Pointer): TgoCallStack;
 begin
-  { Call stacks are only supported on iOS and Android }
+  { Call stacks are only supported on iOS, Android and macOS }
   Result := nil;
 end;
 
 class function TgoExceptionReporter.GetCallStackEntry(
   var AEntry: TgoCallStackEntry): Boolean;
 begin
-  { Call stacks are only supported on iOS and Android }
+  { Call stacks are only supported on iOS, Android and macOS }
   Result := False;
 end;
 
 {$ENDIF}
 
-{$IF Defined(IOS) or Defined(ANDROID)}
+{$IF Defined(MACOS) or Defined(ANDROID)}
 class function TgoExceptionReporter.GetCallStackEntry(
   var AEntry: TgoCallStackEntry): Boolean;
 var
@@ -911,6 +986,11 @@ begin
     end;
 
     AEntry.ModuleName := String(Info.dli_fname);
+    {$IF Defined(MACOS64) and not Defined(IOS)}
+    AEntry.LineNumber := GetLineNumber(AEntry.CodeAddress);
+    {$ELSE}
+    AEntry.LineNumber := 0;
+    {$ENDIF}
   end;
 end;
 {$ENDIF}

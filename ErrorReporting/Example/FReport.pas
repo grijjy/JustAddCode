@@ -5,7 +5,7 @@ interface
 uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, FMX.ScrollBox,
-  FMX.Memo, FMX.StdCtrls, FMX.Controls.Presentation;
+  FMX.Memo, FMX.StdCtrls, FMX.Controls.Presentation, FMX.Memo.Types;
 
 type
   TFormReport = class(TForm)
