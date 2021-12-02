@@ -1,0 +1,11 @@
+float4x4 MVPMatrix;
+
+void main(
+  float4 inPosition: POSITION0,
+  float2 inTexCoord: TEXCOORD0,
+  out float4 outPosition: SV_Position0,
+  out float2 outTexCoord: TEXCOORD0)
+{
+  outPosition = mul(MVPMatrix, inPosition);
+  outTexCoord = inTexCoord;
+}

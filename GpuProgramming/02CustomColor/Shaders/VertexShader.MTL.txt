@@ -1,0 +1,22 @@
+using namespace metal;
+
+struct Vertex 
+{
+  <#VertexDeclaration#>
+};
+
+struct ProjectedVertex
+{
+  float4 position [[position]];
+};
+
+vertex ProjectedVertex vertexShader(
+  constant Vertex *vertexArray [[buffer(0)]],
+  const unsigned int vertexId [[vertex_id]],
+  constant float4x4 &MVPMatrix [[buffer(1)]]) 
+{
+  Vertex in = vertexArray[vertexId];
+  ProjectedVertex out;
+  out.position = float4(in.position[0], in.position[1], in.position[2], 1) * MVPMatrix;
+  return out;
+}

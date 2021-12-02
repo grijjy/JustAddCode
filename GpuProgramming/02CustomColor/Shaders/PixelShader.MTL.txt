@@ -1,0 +1,4 @@
+fragment float4 fragmentShader(constant float4 &Color [[buffer(0)]])
+{
+  return Color;    
+}

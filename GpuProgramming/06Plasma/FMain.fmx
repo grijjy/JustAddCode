@@ -1,0 +1,49 @@
+object FormMain: TFormMain
+  Left = 0
+  Top = 0
+  Caption = 'GPU Programming 06 - Plasma'
+  ClientHeight = 480
+  ClientWidth = 640
+  UsingDesignCamera = False
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnCreate = Form3DCreate
+  OnRender = Form3DRender
+  OnResize = Form3DResize
+  DesignerMasterStyle = 0
+  object Layer3D: TLayer3D
+    Align = Top
+    Height = 30.000000000000000000
+    Position.X = 320.000000000000000000
+    Position.Y = 15.000000000000000000
+    Position.Z = -1.000000000000000000
+    Projection = Screen
+    Resolution = 50
+    StyleLookup = 'backgroundstyle'
+    Width = 640.000000000000000000
+    object LabelBackend: TLabel
+      Align = Client
+      Margins.Left = 8.000000000000000000
+      Size.Width = 632.000000000000000000
+      Size.Height = 30.000000000000000000
+      Size.PlatformDefault = False
+      Text = 'LabelBackend'
+    end
+  end
+  object Plane: TPlane
+    Position.X = 320.000000000000000000
+    Position.Y = 240.000000000000000000
+    Width = 200.000000000000000000
+    Height = 200.000000000000000000
+    Depth = 0.001000000047497451
+    Projection = Screen
+  end
+  object TimerUpdate: TTimer
+    Enabled = False
+    Interval = 10
+    OnTimer = TimerUpdateTimer
+    Left = 304
+    Top = 224
+  end
+end

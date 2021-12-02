@@ -1,0 +1,6 @@
+float4x4 MVPMatrix;
+
+float4 main(float4 position: POSITION0): SV_Position0
+{
+  return mul(MVPMatrix, position);
+}

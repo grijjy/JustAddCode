@@ -1,0 +1,48 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{066AE007-9D61-481A-9023-53D6F9FAE34F}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="SimpleTypeIndex.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="TwoLevelTypeIndex.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="SimpleTypeIndex">
+        <MSBuild Projects="SimpleTypeIndex.dproj"/>
+    </Target>
+    <Target Name="SimpleTypeIndex:Clean">
+        <MSBuild Projects="SimpleTypeIndex.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="SimpleTypeIndex:Make">
+        <MSBuild Projects="SimpleTypeIndex.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="TwoLevelTypeIndex">
+        <MSBuild Projects="TwoLevelTypeIndex.dproj"/>
+    </Target>
+    <Target Name="TwoLevelTypeIndex:Clean">
+        <MSBuild Projects="TwoLevelTypeIndex.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="TwoLevelTypeIndex:Make">
+        <MSBuild Projects="TwoLevelTypeIndex.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="SimpleTypeIndex;TwoLevelTypeIndex"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="SimpleTypeIndex:Clean;TwoLevelTypeIndex:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="SimpleTypeIndex:Make;TwoLevelTypeIndex:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>

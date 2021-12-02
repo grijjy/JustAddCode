@@ -8,7 +8,8 @@ uses
   Grijjy.ErrorReporting in '..\Grijjy.ErrorReporting.pas',
   Grijjy.SymbolTranslator in '..\Grijjy.SymbolTranslator.pas',
   UFoo in 'UFoo.pas',
-  UThreads in 'UThreads.pas';
+  UThreads in 'UThreads.pas',
+  Grijjy.LineNumberInfo in '..\Grijjy.LineNumberInfo.pas';
 
 {$R *.res}
 

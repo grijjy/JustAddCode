@@ -1,0 +1,45 @@
+object FormMain: TFormMain
+  Left = 0
+  Top = 0
+  Caption = 'GPU Programming 02 - Custom Color'
+  ClientHeight = 480
+  ClientWidth = 640
+  UsingDesignCamera = False
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnCreate = Form3DCreate
+  OnRender = Form3DRender
+  DesignerMasterStyle = 0
+  object Layer3D: TLayer3D
+    Align = Top
+    Height = 30.000000000000000000
+    Position.X = 320.000000000000000000
+    Position.Y = 15.000000000000000000
+    Projection = Screen
+    Resolution = 50
+    StyleLookup = 'backgroundstyle'
+    Width = 640.000000000000000000
+    object LabelBackend: TLabel
+      Align = Client
+      Margins.Left = 8.000000000000000000
+      Size.Width = 632.000000000000000000
+      Size.Height = 30.000000000000000000
+      Size.PlatformDefault = False
+      Text = 'LabelBackend'
+    end
+  end
+  object Plane: TPlane
+    Width = 8.000000000000000000
+    Height = 8.000000000000000000
+    Depth = 0.001000000047497451
+    object FloatAnimationRotationY: TFloatAnimation
+      Duration = 3.000000000000000000
+      Loop = True
+      OnProcess = FloatAnimationRotationYProcess
+      PropertyName = 'RotationAngle.Y'
+      StartValue = 0.000000000000000000
+      StopValue = 360.000000000000000000
+    end
+  end
+end

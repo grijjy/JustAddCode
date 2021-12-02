@@ -1,0 +1,15 @@
+using namespace metal;
+
+struct ProjectedVertex
+{
+  float4 position [[position]];
+  float2 texCoord;
+};
+
+fragment float4 fragmentShader(
+  const ProjectedVertex in [[stage_in]],
+  const texture2d<float> Image [[texture(0)]],
+  const sampler ImageSampler [[sampler(0)]])
+{
+  return Image.sample(ImageSampler, in.texCoord);
+}
