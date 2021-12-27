@@ -1,0 +1,23 @@
+float Time;
+float FireworksCount;
+float SparkCount;
+
+#define random(x) frac(sin(float4(6.0, 9.0, 1.0 ,0.0) * x) * 9e2) 
+
+float4 main(float4 position: SV_POSITION, float2 uv: TEXCOORD0): SV_Target0
+{
+  float4 color = float4(0.0, 0.0, 0.0, 0.0);
+  
+  for (float i = -2.0; i < FireworksCount; i++)
+  {
+    float fireworkTime = i * 9.1 + Time;
+    float d = floor(fireworkTime);
+    float4 fireworkPosAndColor = random(d) + 0.3;
+    fireworkTime -= d;
+    for (d = 0.0; d < SparkCount; d++)
+      color += fireworkPosAndColor * (1.0 - fireworkTime) / 1e3 / 
+        length(uv - (fireworkPosAndColor - fireworkTime * (random(d * i) - 0.5)).xy);
+  }
+  
+  return float4(color.r, color.g, color.b, 1.0);
+}

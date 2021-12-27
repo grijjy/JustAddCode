@@ -1,0 +1,16 @@
+uniform vec4 _MVPMatrix[4];
+
+attribute vec4 a_Position;
+attribute vec2 a_TexCoord0;
+
+varying vec2 UV;
+
+void main()
+{
+  gl_Position.x = dot(_MVPMatrix[0], a_Position);
+  gl_Position.y = dot(_MVPMatrix[1], a_Position);
+  gl_Position.z = dot(_MVPMatrix[2], a_Position);
+  gl_Position.w = dot(_MVPMatrix[3], a_Position); 
+  
+  UV = a_TexCoord0;
+}

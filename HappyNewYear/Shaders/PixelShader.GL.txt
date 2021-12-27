@@ -1,0 +1,25 @@
+uniform float _Time;
+uniform float _FireworksCount;
+uniform float _SparkCount;
+
+varying vec2 UV;
+
+#define random(x) fract(sin(vec4(6.0, 9.0, 1.0 ,0.0) * x) * 9e2) 
+
+void main()
+{
+  vec4 color = vec4(0.0, 0.0, 0.0, 0.0);
+  
+  for (float i = -2.0; i < _FireworksCount; i++)
+  {
+    float fireworkTime = i * 9.1 + _Time;
+    float d = floor(fireworkTime);
+    vec4 fireworkPosAndColor = random(d) + 0.3;
+    fireworkTime -= d;
+    for (d = 0.0; d < _SparkCount; d++)
+      color += fireworkPosAndColor * (1.0 - fireworkTime) / 1e3 / 
+        length(UV - (fireworkPosAndColor - fireworkTime * (random(d * i) - 0.5)).xy);
+  }
+  
+  gl_FragColor = vec4(color.r, color.g, color.b, 1.0);
+}
