@@ -9,15 +9,20 @@ iOSDevice32/
 iOSDevice64/
 iOSSimulator/
 OSX32/
+OSX64/
 Win32/
 Win64/
 Linux64/
+Android64/
 #ignore Delphi build files
 *.obj
 *.exe
 *.dcu
 *.map
 *.deployproj
+*.stat
+*.tvsconfig
+*.delphilsp.json
 #ignore Delphi temp and backup files
 *.~*
 #ignore Delphi local files
