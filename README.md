@@ -20,4 +20,5 @@ Here you will find sample code and other tidbits from Grijjy's [Just Add Code](h
 * [Happy New Year from Team Grijjy!](HappyNewYear), as discussed in this [blog post](https://blog.grijjy.com/2021/12/31/happy-new-year-from-team-grijjy/).
 * [The Curiously Recurring Generic Pattern](CuriouslyRecurringGenericPattern), as discussed in this [blog post](https://blog.grijjy.com/2022/01/25/crgp/).
 * [Revisiting Startup Parameters and Settings](Delphi27thAnniversary), as discussed in this [blog post](https://blog.grijjy.com/?p=5274).
+* [Lightweight Multicast Events](MulticastEvents), as discussed in this [blog post](https://blog.grijjy.com/?p=5418).
 
