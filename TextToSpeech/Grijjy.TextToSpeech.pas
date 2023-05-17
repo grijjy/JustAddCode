@@ -1,15 +1,21 @@
 unit Grijjy.TextToSpeech;
 {< Universal Text To Speech for iOS, Android, Windows and macOS }
 
+// Om: mar20: added fn getVoices - get list of available voices ( only for iOS at this time)
+
 interface
 
 uses
   System.Classes;
 
 type
+
+  TVoiceGender=(vgMale,vgFemale,vgUnkown);  //Om: Kinds of voices
+
   { Universal Text To Speech engine.
     Works on iOS, Android, Windows and macOS. Does nothing on other platforms.
     To create an instance, use TgoTextToSpeech.Create. }
+
   IgoTextToSpeech = interface
   ['{7797ED2A-0695-445A-BA84-495E280F86AB}']
     {$REGION 'Internal Declarations'}
@@ -21,6 +27,10 @@ type
     function _GetOnSpeechStarted: TNotifyEvent;
     procedure _SetOnSpeechStarted(const AValue: TNotifyEvent);
     {$ENDREGION 'Internal Declarations'}
+
+    function  getVoices(aList:TStrings):boolean;         // Om: mar20: get list of available voices ( only for iOS at this time)
+    function  getVoiceGender:TVoiceGender;               // Om: mar20:
+    function  setVoice(const aMaleVoiceLang,aFemaleVoiceLang:String):boolean; // Om: mar20: set voices w/ 'pt-BR'  'en-US' etc (lang-country)
 
     { Speaks a string of text.
 
@@ -94,6 +104,9 @@ type
     class function Create: IgoTextToSpeech; static;
   end;
 
+var
+  NativeSpeechLanguage:String='??-??';  // loaded at unit initialization
+
 implementation
 
 uses
@@ -108,6 +121,7 @@ uses
   {$ELSE}
     {$MESSAGE Error 'Text-to-Speech not supported on this platform'}
   {$ENDIF}
+
 
 { TgoTextToSpeech }
 

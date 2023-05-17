@@ -4,6 +4,31 @@ The code in this directory is a small exercise in designing a cross platform abs
 
 If you are only interested in the end result, then you can stick to the first part of this document and bail when we get to the implementation details.
 
+# In this fork: by oMAR mar/20
+* Added getVoices ( a list of voices available to Text-to-speech - returns voice descriptions on a TStrings )
+status: Ok for iOS, Android and Windows 
+* Loads default voices for the Locale. If available, capture 1 male and 1 female voices for the default OS language
+* Capture one male and one female voices to allow 2 person dialog ( TV journal style )
+* Set voices alternating, one line at a time ( one line for the guy one for the girl )
+   ok for iOS and Android.   Not working for Windows.
+   Windows SAPI COM code needs fixing, to do voice selection
+   Hard coded voice selection ( pt-BR )    <-- fix that
+- for iOS there are one male and one female voices available in portuguese-BR
+- for Android, there is a brazilian male voice and a spanish-mexican female that kinda make a funny couple :) 
+  on Android, you can download extra voices ( Android Settings )
+
+The example was expanded to:
+
+1) List voices avaivable on the Device. iOS lists all voices available ( 59 in my device). On Android I had to go to device Settings and download the desired voices, if not present. Make sure there are one male and one female voices avalable for your language. 
+
+2) Set language with language-country code (p.e. 'en-US', 'pt-BR' ..)
+
+This will capture both female and male voices, used to speak the script.
+
+Om: changes to original JustAddCode code prefixed by "Om:"
+
+check tiktok video: https://www.tiktok.com/@omar_reis/video/6802287150411877638
+
 ## Choosing a feature set
 
 A common issue with abstracting platform differences is that you must decide on a feature set. A specific feature may be supported on one platform, but not on another. When it comes to text-to-speech, some platforms support choosing a voice, changing the pitch or speech rate, customize pronunciation with markup in the text to speak etc. Other platforms may not support some of these features, or only in an incompatible way.
@@ -423,3 +448,4 @@ end;
 ```
 
 We pass the hash map we created before, as well as a `QUEUE_FLUSH` flag that is used to tell the engine to terminate any current speech.
+
