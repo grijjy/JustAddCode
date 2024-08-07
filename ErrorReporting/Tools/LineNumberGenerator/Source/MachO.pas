@@ -149,8 +149,8 @@ begin
   if (Header.magic <> MH_MAGIC_64) then
     raise EMachOError.Create('Not a valid Mach-O file. Only 64-bit, little-endian Mach-O files are supported.');
 
-  if (Header.cputype <> CPU_TYPE_X86_64) then
-    raise EMachOError.Create('Only 64-bit Intel CPU type supported.');
+  if (Header.cputype <> CPU_TYPE_X86_64) and (Header.cputype <> CPU_TYPE_ARM64) then
+    raise EMachOError.Create('Only 64-bit Intel and ARM CPU types supported.');
 
   for I := 0 to Header.ncmds - 1 do
   begin

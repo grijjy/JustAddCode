@@ -12,6 +12,9 @@ const
   CPU_ARCH_ABI64  = $01000000; (* 64 bit ABI *)
   CPU_TYPE_X86    = 7;
   CPU_TYPE_X86_64 = CPU_TYPE_X86 or CPU_ARCH_ABI64;
+  CPU_TYPE_ARM    = 12;
+  CPU_TYPE_ARM64  = CPU_TYPE_ARM or CPU_ARCH_ABI64;
+
 {$ENDREGION 'machine.h'}
 
 {$REGION 'vm_prot.h'}
