@@ -6,6 +6,12 @@ interface
 uses
   Winapi.Windows,
   Winapi.ActiveX,
+
+  System.Variants,
+  System.SysUtils,
+
+  System.Classes,  //TStrings
+  Grijjy.TextToSpeech,
   Grijjy.TextToSpeech.Base;
 
 { Partial import of sapi.dll type library }
@@ -105,6 +111,55 @@ type
     function GetInfo(out pInfo: SPEVENTSOURCEINFO): HResult; stdcall;
   end;
 
+
+type  // Om: added
+// for code from https://edn.embarcadero.com/article/29583#EnumVoices
+
+
+// *********************************************************************//
+// Interface: ISpeechObjectToken
+// Flags:     (4416) Dual OleAutomation Dispatchable
+// GUID:      {C74A3ADC-B727-4500-A84A-B526721C8B8C}
+// *********************************************************************//
+  ISpeechObjectToken = interface(IDispatch)       //only using description
+    ['{C74A3ADC-B727-4500-A84A-B526721C8B8C}']
+    // function Get_Id: WideString; safecall;
+    // function Get_DataKey: ISpeechDataKey; safecall;
+    // function Get_Category: ISpeechObjectTokenCategory; safecall;
+    function GetDescription(Locale: Integer): WideString; safecall;
+    // procedure SetId(const Id: WideString; const CategoryID: WideString; CreateIfNotExist: WordBool); safecall;
+    // function GetAttribute(const AttributeName: WideString): WideString; safecall;
+    // function CreateInstance(const pUnkOuter: IUnknown; ClsContext: SpeechTokenContext): IUnknown; safecall;
+    // procedure Remove(const ObjectStorageCLSID: WideString); safecall;
+    // function GetStorageFileName(const ObjectStorageCLSID: WideString; const KeyName: WideString;
+    //                             const FileName: WideString; Folder: SpeechTokenShellFolder): WideString; safecall;
+    // procedure RemoveStorageFileName(const ObjectStorageCLSID: WideString;
+    //                                 const KeyName: WideString; DeleteFile: WordBool); safecall;
+    // function IsUISupported(const TypeOfUI: WideString; const ExtraData: OleVariant;
+    //                        const Object_: IUnknown): WordBool; safecall;
+    // procedure DisplayUI(hWnd: Integer; const Title: WideString; const TypeOfUI: WideString;
+    //                     const ExtraData: OleVariant; const Object_: IUnknown); safecall;
+    // function MatchesAttributes(const Attributes: WideString): WordBool; safecall;
+    // property Id: WideString read Get_Id;
+    // property DataKey: ISpeechDataKey read Get_DataKey;
+    // property Category: ISpeechObjectTokenCategory read Get_Category;
+  end;
+
+// Om: added
+// *********************************************************************//
+// Interface: ISpeechObjectTokens
+// Flags:     (4416) Dual OleAutomation Dispatchable
+// GUID:      {9285B776-2E7B-4BC0-B53E-580EB6FA967F}
+// *********************************************************************//
+  ISpeechObjectTokens = interface(IDispatch)
+    ['{9285B776-2E7B-4BC0-B53E-580EB6FA967F}']
+    function Get_Count: Integer; safecall;
+    function Item(Index: Integer): ISpeechObjectToken; safecall;
+    //function Get__NewEnum: IUnknown; safecall;
+    property Count: Integer read Get_Count;
+    //property _NewEnum: IUnknown read Get__NewEnum;
+  end;
+
 type
   // *********************************************************************//
   // Interface: ISpVoice
@@ -147,6 +202,7 @@ type
       pszTypeOfUI: PWideChar; pvExtraData: Pointer;
       cbExtraData: LongWord): HResult; stdcall;
   end;
+
 
 const
   // SPEVENTENUM values
@@ -222,21 +278,34 @@ type
   {$REGION 'Internal Declarations'}
   private
     FVoice: ISpVoice;
+
+    fCOMVoice: OLEVariant;
   protected
     { IgoTextToSpeech }
+    function getVoices(aList:TStrings):boolean; override;   // Om: mar20: get list of available voices ( only for iOS at this time)
+    function getVoiceGender:TVoiceGender;       override;   // Om: mar20:
+    function setVoice(const aMaleVoiceLang,aFemaleVoiceLang:String):boolean; override;  // Om: mar20: set voice w/ spec like 'pt-BR'
+
+
     function Speak(const AText: String): Boolean; override;
     procedure Stop; override;
     function IsSpeaking: Boolean; override;
   private
+
      class procedure VoiceCallback(wParam: WPARAM; lParam: LPARAM); stdcall; static;
      procedure HandleVoiceEvent;
+     procedure getNativeVoices;
   {$ENDREGION 'Internal Declarations'}
   public
+     fNativeVoice :OLEVariant;  //male and female voices
+     fMaleVoice   :OLEVariant;
+     fFemaleVoice :OLEVariant;
+
     constructor Create;
-    destructor Destroy; override;
+    destructor  Destroy; override;
   end;
 
-implementation
+implementation  //----------------------------------------------------------------------------
 
 uses
   System.Win.ComObj;
@@ -258,7 +327,14 @@ var
   Events: ULONGLONG;
 begin
   inherited Create;
+
+  fNativeVoice := varNull;
+  fMaleVoice   := varNull;
+  fFemaleVoice := varNull;
+
+  //
   FVoice := CreateComObject(CLASS_SpVoice) as ISpVoice;
+
   if (FVoice <> nil) then
   begin
     { We want to be notified when speech synthesis has started and when it
@@ -275,8 +351,13 @@ begin
     { Tell speech API how to notify us. We use a callback mechanism here. }
     OleCheck(FVoice.SetNotifyCallbackFunction(VoiceCallback, 0, NativeInt(Self)));
 
+    fCOMVoice := CreateOLEObject('SAPI.SpVoice');  //use OLE auto to get voices
+
+    getNativeVoices;    //Om:
+
     Available := True;
-  end;
+  end
+  else fCOMVoice := varNull; //?? no voice
 end;
 
 destructor TgoTextToSpeechImplementation.Destroy;
@@ -322,19 +403,170 @@ function TgoTextToSpeechImplementation.IsSpeaking: Boolean;
 var
   Status: SPVOICESTATUS;
 begin
-  if (FVoice = nil) or (FVoice.GetStatus(Status, nil) <> S_OK) then
-    Result := False
-  else
-    Result := ((Status.dwRunningState and SPRS_IS_SPEAKING) <> 0)
-          and ((Status.dwRunningState and SPRS_DONE) = 0);
+  if (FVoice = nil) or (FVoice.GetStatus(Status, nil) <> S_OK) then  Result := False
+  else Result := ((Status.dwRunningState and SPRS_IS_SPEAKING) <> 0) and ((Status.dwRunningState and SPRS_DONE) = 0);
+end;
+
+procedure TgoTextToSpeechImplementation.getNativeVoices;  // Om: mar20: get list of available voices ( only for iOS at this time)
+var
+  i: Integer;
+  s:String;
+  vozes:OLEVariant;
+  aVoiceToken:OLEVariant;
+begin
+  fNativeVoice := varNull;
+  fMaleVoice   := varNull;
+  fFemaleVoice := varNull;
+
+  if not VarIsEmpty( fCOMVoice ) then
+    begin
+       vozes := fCOMVoice.getVoices;
+       for i := 0 to vozes.Count - 1 do
+         begin
+           aVoiceToken := vozes.item(i);
+           s := Lowercase(aVoiceToken.GetDescription);
+           // locate the best male and female voices available and memoise objects
+           if      Pos('portuguese',s)>0 then
+             begin
+               fFemaleVoice := aVoiceToken;
+               //aVoiceToken.AddRef;             // <-- necessary ??
+             end
+           else if Pos('english',s)>0    then
+             begin
+               fMaleVoice   := aVoiceToken;
+               //aVoiceToken.AddRef;
+             end;
+         end;
+    end;
+
+  if not VarIsNull(fMaleVoice)   then
+    fNativeVoice := fMaleVoice;     //any voice will do, but..
+  if not VarIsNull(fFemaleVoice) then
+    fNativeVoice := fFemaleVoice;   //.. default = female
+end;
+
+// from https://edn.embarcadero.com/article/29583#EnumVoices
+function TgoTextToSpeechImplementation.getVoices(aList:TStrings):boolean;  // Om: mar20: get list of available voices ( only for iOS at this time)
+var
+  i: Integer; S:String;
+  SOToken: OLEVariant;   //ISpeechObjectToken;
+  SOTokens: OLEVariant;  //ISpeechObjectTokens;
+begin
+  // fVoice..EventInterests := SVEAllEvents;
+  //Log('About to enumerate voices');
+  Result := false;
+
+  if VarIsNull(fCOMVoice) then exit;  //sanity check
+
+  SOTokens := fCOMVoice.GetVoices('', '');   //
+  for I := 0 to SOTokens.Count - 1 do
+  begin
+    //For each voice, store the descriptor in the TStrings list
+    SOToken := SOTokens.Item(I);
+    S := SOToken.GetDescription(0);
+    aList.Add(S);
+    // cbVoices.Items.AddObject(SOToken.GetDescription(0), TObject(SOToken));
+    //Increment descriptor reference count to ensure it's not destroyed
+    // SOToken._AddRef;
+    Result := true;
+  end;
+
+  // aList.Add('------------------------');
+  // aList.Add(fMaleVoice.GetDescription);    //test show saved voices
+  // aList.Add(fFemaleVoice.GetDescription);
+
+  // if cbVoices.Items.Count > 0 then
+  // begin
+  //   cbVoices.ItemIndex := 0; //Select 1st voice
+  //   cbVoices.OnChange(cbVoices); //& ensure OnChange triggers
+  // end;
+  // Log('Enumerated voices');
+  // Log('About to check attributes');
+  // tbRate.Position := SpVoice.Rate;
+  // lblRate.Caption := IntToStr(tbRate.Position);
+  // tbVolume.Position := SpVoice.Volume;
+  // lblVolume.Caption := IntToStr(tbVolume.Position);
+  // Log('Checked attributes');
+  //
+end;
+
+
+// getVoices() using dispatch interfaces
+// var
+//   i: Integer;
+//   s:String;
+//   voz:OLEVariant;
+//   vozes:OLEVariant;
+//   aVoiceToken:OLEVariant;
+//
+// begin
+//   Result := false;
+//   if Assigned(fVoice) then
+//     begin
+//        voz := CreateOLEObject('SAPI.SpVoice');  //use OLE auto to get voices
+//        if not VarIsEmpty( voz ) then
+//          begin
+//            vozes := voz.getVoices;
+//            for i := 0 to vozes.Count - 1 do
+//              begin
+//                aVoiceToken := vozes.item(i);
+//                s := aVoiceToken.GetDescription;
+//                aList.Add( s );
+//                Result := true;
+//              end;
+//          end;
+//     end;
+// end;
+
+// Om: mar20:
+
+function TgoTextToSpeechImplementation.getVoiceGender:TVoiceGender;  // Om: mar20:
+begin
+  Result := vgUnkown;    // not implemented for windows yet
+  // if not VarIsNull(fNativeVoice) then
+  //    begin
+  //      if      (not VarIsNull(fFemaleVoice) ) and (fNativeVoice.getDescription=fFemaleVoice.getDescription) then Result := vgFemale
+  //      else if (not VarIsNull(fMaleVoice) )   and (fNativeVoice.getDescription=fMaleVoice.getDescription)   then Result := vgFemale;
+  //    end;
+end;
+
+function TgoTextToSpeechImplementation.setVoice(const aMaleVoiceLang,aFemaleVoiceLang:String ):boolean;  // Om: mar20: set voice w/ spec like 'pt-BR'
+begin
+  Result := false;      // not implemented
+  //TODO:
 end;
 
 function TgoTextToSpeechImplementation.Speak(const AText: String): Boolean;
+var s:String;
 begin
-  if (FVoice = nil) then
-    Result := False
-  else
-    Result := (FVoice.Speak(PWideChar(AText), SPF_ASYNC, nil) = S_OK);
+  if (FVoice = nil) then Result := False
+ else begin
+    // // alternating male-female voices
+    // if not ( VarIsNull(fFemaleVoice) or  VarIsNull(fMaleVoice) ) then      //
+    //   begin
+    //     if (fNativeVoice.getDescription=fFemaleVoice.getDescription) then fNativeVoice:=fMaleVoice
+    //       else fNativeVoice:=fFemaleVoice;
+    //   end;
+
+     // // commented voice selection. Neither of the SetVoice calls work
+
+     // // set voice
+     // if not ( VarIsNull(fNativeVoice) or VarIsNull(fCOMVoice)) then
+     //   begin
+     //     //fCOMVoice.SetVoice(fNativeVoice);       //nem um dos jeitos funcionou, desabilitei
+     //      fVoice.SetVoice( fNativeVoice );   // this breaks the code
+     //   end;
+
+
+    Result := ( fVoice.Speak( PWideChar(AText), SPF_ASYNC, nil) = S_OK );  // do speak
+
+    // if not VarIsNull(fNativeVoice) then  //test
+    //   begin
+    //     s:= fNativeVoice.getDescription;
+    //     Result := (FVoice.Speak( PWideChar(s), SPF_ASYNC, nil) = S_OK);
+    //   end;
+
+  end;
 end;
 
 procedure TgoTextToSpeechImplementation.Stop;
@@ -353,4 +585,48 @@ begin
   TgoTextToSpeechImplementation(lParam).HandleVoiceEvent;
 end;
 
+//-----------------------------------------------------------
+
+// from https://stackoverflow.com/questions/19369809/delphi-get-country-codes-by-localeid/37981772#37981772
+function LCIDToLocaleName(Locale: LCID; lpName: LPWSTR; cchName: Integer;
+  dwFlags: DWORD): Integer; stdcall;external kernel32 name 'LCIDToLocaleName';
+
+
+function LocaleIDString():string;
+var
+   strNameBuffer : array [0..255] of WideChar; // 84 was len from original process online
+   //localID : TLocaleID;
+   // localID was 0, so didn't initialize, but still returned proper code page.
+   // using 0 in lieu of localID : nets the same result, var not required.
+   i : integer;
+begin
+  Result := '';
+
+  // LOCALE_USER_DEFAULT  vs. LOCALE_SYSTEM_DEFAULT
+  // since XP LOCALE_USER_DEFAULT is considered good practice for compatibility
+  if (LCIDToLocaleName(LOCALE_USER_DEFAULT, strNameBuffer, 255, 0) > 0) then
+    for i := 0 to 255 do
+     begin
+      if strNameBuffer[i] = #0 then  break
+      else Result := Result + strNameBuffer[i];
+    end;
+
+  if (Length(Result) = 0) and (LCIDToLocaleName(0, strNameBuffer, 255, 0) > 0) then
+   for i := 0 to 255 do
+     begin
+      if strNameBuffer[i] = #0 then break
+      else Result := Result + strNameBuffer[i];
+    end;
+
+  if Length(Result) = 0 then
+    Result := 'NR-NR' // defaulting to [No Reply - No Reply]
+end;
+
+procedure getNativeVoiceLanguage;
+begin
+  NativeSpeechLanguage := LocaleIDString; // 'pt-BR'
+end;
+
+initialization
+   getNativeVoiceLanguage;     // get OS language settings
 end.
